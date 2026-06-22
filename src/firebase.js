@@ -72,7 +72,7 @@ const localAuth = {
     callback(currentUser);
     return () => mockAuthListeners.delete(callback);
   },
-  signInWithEmailAndPassword: async (email, password) => {
+  signInWithEmailAndPassword: async (email) => {
     // Simulated sign in
     const users = JSON.parse(localStorage.getItem('dg_db_users') || '{}');
     const userKey = Object.keys(users).find(k => users[k].email === email);
@@ -83,7 +83,7 @@ const localAuth = {
     mockAuthListeners.forEach(cb => cb(currentUser));
     return { user: currentUser };
   },
-  createUserWithEmailAndPassword: async (email, password) => {
+  createUserWithEmailAndPassword: async (email) => {
     const users = JSON.parse(localStorage.getItem('dg_db_users') || '{}');
     const userExists = Object.keys(users).some(k => users[k].email === email);
     if (userExists) throw new Error("auth/email-already-in-use");

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
   LayoutDashboard, 
@@ -8,7 +8,6 @@ import {
   Target, 
   Settings, 
   LogOut, 
-  ShieldAlert,
   BrainCircuit
 } from 'lucide-react';
 import { logoutUser, subscribeToAuth, getDocument } from '../firebase';

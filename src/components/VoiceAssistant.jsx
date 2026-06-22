@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mic, MicOff, Volume2, X, BrainCircuit } from 'lucide-react';
 import { processVoiceCommand } from '../gemini';
@@ -10,60 +10,8 @@ export default function VoiceAssistant() {
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState('');
   const [response, setResponse] = useState('');
-  const [isSupported, setIsSupported] = useState(true);
+  const [isSupported] = useState(() => typeof window !== 'undefined' && !!(window.SpeechRecognition || window.webkitSpeechRecognition));
   const recognitionRef = useRef(null);
-
-  useEffect(() => {
-    // Check for speech recognition support
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    if (!SpeechRecognition) {
-      setIsSupported(false);
-      return;
-    }
-
-    const rec = new SpeechRecognition();
-    rec.continuous = false;
-    rec.interimResults = false;
-    rec.lang = 'en-US';
-
-    rec.onstart = () => {
-      setIsListening(true);
-      setTranscript('Listening...');
-      setResponse('');
-    };
-
-    rec.onresult = async (event) => {
-      const text = event.results[0][0].transcript;
-      setTranscript(text);
-      setIsListening(false);
-      await handleVoiceCommand(text);
-    };
-
-    rec.onerror = (e) => {
-      console.error("Speech recognition error:", e);
-      setIsListening(false);
-      setTranscript('Error listening. Try again.');
-    };
-
-    rec.onend = () => {
-      setIsListening(false);
-    };
-
-    recognitionRef.current = rec;
-  }, []);
-
-  const toggleListening = () => {
-    if (!isSupported) return;
-    if (isListening) {
-      recognitionRef.current.stop();
-    } else {
-      try {
-        recognitionRef.current.start();
-      } catch (e) {
-        console.error("Could not start recognition:", e);
-      }
-    }
-  };
 
   const speakText = (text) => {
     if (!window.speechSynthesis) return;
@@ -82,7 +30,7 @@ export default function VoiceAssistant() {
     window.speechSynthesis.speak(utterance);
   };
 
-  const handleVoiceCommand = async (text) => {
+  const handleVoiceCommand = useCallback(async (text) => {
     setResponse('Processing your request...');
     
     try {
@@ -147,6 +95,57 @@ export default function VoiceAssistant() {
       const errorMsg = "I couldn't process that command. Please try again.";
       setResponse(errorMsg);
       speakText(errorMsg);
+    }
+  }, [navigate]);
+
+  useEffect(() => {
+    // Check for speech recognition support
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      return;
+    }
+
+    const rec = new SpeechRecognition();
+    rec.continuous = false;
+    rec.interimResults = false;
+    rec.lang = 'en-US';
+
+    rec.onstart = () => {
+      setIsListening(true);
+      setTranscript('Listening...');
+      setResponse('');
+    };
+
+    rec.onresult = async (event) => {
+      const text = event.results[0][0].transcript;
+      setTranscript(text);
+      setIsListening(false);
+      await handleVoiceCommand(text);
+    };
+
+    rec.onerror = (e) => {
+      console.error("Speech recognition error:", e);
+      setIsListening(false);
+      setTranscript('Error listening. Try again.');
+    };
+
+    rec.onend = () => {
+      setIsListening(false);
+    };
+
+    recognitionRef.current = rec;
+  }, [handleVoiceCommand]);
+
+  const toggleListening = () => {
+    if (!isSupported) return;
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      try {
+        recognitionRef.current.start();
+      } catch (e) {
+        console.error("Could not start recognition:", e);
+      }
     }
   };
 

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Calendar, ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, RefreshCw } from 'lucide-react';
-import { queryDocuments, whereClause, authInstance, streamDocuments } from '../firebase';
+import { Calendar, ChevronLeft, ChevronRight, RefreshCw } from 'lucide-react';
+import { whereClause, authInstance, streamDocuments } from '../firebase';
 
 export default function CalendarView() {
   const navigate = useNavigate();
@@ -29,7 +29,7 @@ export default function CalendarView() {
     );
 
     return unsubscribe;
-  }, []);
+  }, [navigate]);
 
   const handleGoogleSync = () => {
     setIsSyncing(true);

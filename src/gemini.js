@@ -102,7 +102,7 @@ const mockAnalyzeDeadlineRisk = (task) => {
   return { riskScore, riskLevel, reasoning: `You have ${estimatedHours} hours of work remaining with only ${Math.round(diffHours)} hours left before the deadline.`, recommendations };
 };
 
-const mockGenerateSchedule = (tasks, calendarEvents) => {
+const mockGenerateSchedule = (tasks) => {
   // Simply place tasks in consecutive 1-2 hour blocks for the next 3 days
   const today = new Date();
   const schedule = [];

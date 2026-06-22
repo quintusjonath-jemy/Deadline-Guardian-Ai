@@ -1,21 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Settings, ShieldCheck, Key, RefreshCw, Trash2, Cpu } from 'lucide-react';
+import { useState } from 'react';
+import { ShieldCheck, Key, Trash2, Cpu } from 'lucide-react';
 import { getGeminiApiKey } from '../gemini';
 
 export default function SettingsPage() {
-  const navigate = useNavigate();
-  const [apiKey, setApiKey] = useState('');
-  const [clientId, setClientId] = useState('');
+  const [apiKey, setApiKey] = useState(() => localStorage.getItem('dg_gemini_api_key') || '');
+  const [clientId, setClientId] = useState(() => localStorage.getItem('dg_google_client_id') || '');
   const [isSaved, setIsSaved] = useState(false);
-
-  useEffect(() => {
-    // Load existing settings
-    const savedKey = localStorage.getItem('dg_gemini_api_key') || '';
-    const savedClientId = localStorage.getItem('dg_google_client_id') || '';
-    setApiKey(savedKey);
-    setClientId(savedClientId);
-  }, []);
 
   const handleSaveSettings = (e) => {
     e.preventDefault();

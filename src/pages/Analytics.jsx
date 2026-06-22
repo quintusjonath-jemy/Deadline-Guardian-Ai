@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   TrendingUp, 
   ShieldAlert, 
   AlertCircle, 
   Activity, 
-  Clock, 
   ArrowRight, 
   RefreshCw 
 } from 'lucide-react';
@@ -20,7 +19,7 @@ import {
   Bar, 
   Cell 
 } from 'recharts';
-import { queryDocuments, whereClause, authInstance, streamDocuments } from '../firebase';
+import { whereClause, authInstance, streamDocuments } from '../firebase';
 import { analyzeDeadlineRisk } from '../gemini';
 
 export default function Analytics() {
@@ -29,6 +28,20 @@ export default function Analytics() {
   const [selectedTaskRisk, setSelectedTaskRisk] = useState(null);
   const [riskDetails, setRiskDetails] = useState(null);
   const [isLoadingRisk, setIsLoadingRisk] = useState(false);
+
+  const triggerRiskAnalysis = useCallback(async (task) => {
+    setSelectedTaskRisk(task.id);
+    setIsLoadingRisk(true);
+    try {
+      const result = await analyzeDeadlineRisk(task);
+      setRiskDetails(result);
+    } catch (e) {
+      console.error("Error analyzing deadline risk:", e);
+      setRiskDetails(null);
+    } finally {
+      setIsLoadingRisk(false);
+    }
+  }, []);
 
   useEffect(() => {
     const user = authInstance.currentUser;
@@ -53,21 +66,7 @@ export default function Analytics() {
     );
 
     return unsubscribe;
-  }, []);
-
-  const triggerRiskAnalysis = async (task) => {
-    setSelectedTaskRisk(task.id);
-    setIsLoadingRisk(true);
-    try {
-      const result = await analyzeDeadlineRisk(task);
-      setRiskDetails(result);
-    } catch (e) {
-      console.error(e);
-      setRiskDetails(null);
-    } finally {
-      setIsLoadingRisk(false);
-    }
-  };
+  }, [selectedTaskRisk, triggerRiskAnalysis, navigate]);
 
   // Chart Data preparation
   const getAreaChartData = () => {

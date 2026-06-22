@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Calendar, 
-  Clock, 
   Sparkles, 
   RefreshCw, 
   AlertCircle, 
@@ -16,24 +15,22 @@ import { generateSchedule } from '../gemini';
 
 export default function Planner() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user] = useState(() => authInstance.currentUser);
   const [tasks, setTasks] = useState([]);
   const [plan, setPlan] = useState(null);
   const [selectedDayIdx, setSelectedDayIdx] = useState(0);
   const [isUpdating, setIsUpdating] = useState(false);
 
   useEffect(() => {
-    const currUser = authInstance.currentUser;
-    if (!currUser) {
+    if (!user) {
       navigate('/login');
       return;
     }
-    setUser(currUser);
 
     // Stream tasks
     const unsubscribeTasks = streamDocuments(
       'tasks',
-      [whereClause('userId', '==', currUser.uid)],
+      [whereClause('userId', '==', user.uid)],
       (snapshot) => {
         const tasksList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setTasks(tasksList);
@@ -43,7 +40,7 @@ export default function Planner() {
     // Stream plan
     const unsubscribePlans = streamDocuments(
       'plans',
-      [whereClause('userId', '==', currUser.uid)],
+      [whereClause('userId', '==', user.uid)],
       (snapshot) => {
         if (snapshot.docs.length > 0) {
           setPlan(snapshot.docs[0].data());
@@ -57,7 +54,7 @@ export default function Planner() {
       unsubscribeTasks();
       unsubscribePlans();
     };
-  }, []);
+  }, [user, navigate]);
 
   const handleRegenerateSchedule = async () => {
     if (tasks.filter(t => t.status !== 'completed').length === 0) {
@@ -68,7 +65,7 @@ export default function Planner() {
     setIsUpdating(true);
     try {
       // 1. Fetch mock/real Google calendar events
-      const eventsSnap = await queryDocuments('notifications', whereClause('userId', '==', user.uid));
+      await queryDocuments('notifications', whereClause('userId', '==', user.uid));
       // In a real app we'd fetch Google Calendar events; for demonstration, we pass mock events or standard work constraints.
       const mockCalendarEvents = [
         { title: "Weekly Sync Meeting", startTime: "09:00", endTime: "10:00" },

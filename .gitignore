@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Firebase Cache
+.firebase/
+
+# Environment files
+.env
+.env.*
+!.env.example

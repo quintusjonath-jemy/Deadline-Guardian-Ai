@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { BrainCircuit, Mail, Lock, ShieldAlert } from 'lucide-react';
 import { loginUser, loginWithGoogle } from '../firebase';

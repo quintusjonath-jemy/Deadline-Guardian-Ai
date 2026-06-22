@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ShieldAlert, RefreshCw, X, CalendarCheck2 } from 'lucide-react';
 import { queryDocuments, whereClause, updateDocument, authInstance, createDocument } from '../firebase';
 import { proposeRecoveryPlan } from '../gemini';
@@ -8,15 +8,6 @@ export default function RecoveryAgent() {
   const [isOpen, setIsOpen] = useState(false);
   const [recoveryProposal, setRecoveryProposal] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    // Only check if user is logged in
-    const checkTimer = setTimeout(() => {
-      checkForMissedTasks();
-    }, 3000); // Check 3 seconds after loading to let things settle
-
-    return () => clearTimeout(checkTimer);
-  }, []);
 
   const checkForMissedTasks = async () => {
     const user = authInstance.currentUser;
@@ -62,6 +53,15 @@ export default function RecoveryAgent() {
       console.error("Error in RecoveryAgent check:", e);
     }
   };
+
+  useEffect(() => {
+    // Only check if user is logged in
+    const checkTimer = setTimeout(() => {
+      checkForMissedTasks();
+    }, 3000); // Check 3 seconds after loading to let things settle
+
+    return () => clearTimeout(checkTimer);
+  }, []);
 
   const handleApplyReschedule = async () => {
     const user = authInstance.currentUser;

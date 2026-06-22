@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
-  TrendingDown, 
-  CheckCircle2, 
   Clock, 
   Calendar, 
   Flame, 
@@ -11,12 +9,12 @@ import {
   ChevronRight,
   ShieldCheck
 } from 'lucide-react';
-import { queryDocuments, whereClause, getDocument, authInstance, streamDocuments } from '../firebase';
+import { whereClause, getDocument, authInstance, streamDocuments } from '../firebase';
 import { analyzeDeadlineRisk } from '../gemini';
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user] = useState(() => authInstance.currentUser);
   const [tasks, setTasks] = useState([]);
   const [schedule, setSchedule] = useState([]);
   const [productivityScore, setProductivityScore] = useState(100);
@@ -30,55 +28,6 @@ export default function Dashboard() {
     streak: 3
   });
 
-  useEffect(() => {
-    const currUser = authInstance.currentUser;
-    if (!currUser) {
-      navigate('/login');
-      return;
-    }
-    setUser(currUser);
-
-    // Initial load
-    fetchData(currUser.uid);
-
-    // Stream tasks for live updates
-    const unsubscribeTasks = streamDocuments(
-      'tasks',
-      [whereClause('userId', '==', currUser.uid)],
-      (snapshot) => {
-        const tasksList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setTasks(tasksList);
-        processStatsAndAiCoaching(tasksList, currUser.uid);
-      }
-    );
-
-    // Stream plans/schedule
-    const unsubscribePlans = streamDocuments(
-      'plans',
-      [whereClause('userId', '==', currUser.uid)],
-      (snapshot) => {
-        if (snapshot.docs.length > 0) {
-          const planData = snapshot.docs[0].data();
-          const todayStr = new Date().toISOString().split('T')[0];
-          const todayPlan = planData.generatedSchedule?.find(s => s.date === todayStr);
-          setSchedule(todayPlan?.timeBlocks || []);
-        } else {
-          setSchedule([]);
-        }
-      }
-    );
-
-    // Listen to recovery agent reschedule triggers
-    const handleReschedule = () => fetchData(currUser.uid);
-    window.addEventListener('task-rescheduled', handleReschedule);
-
-    return () => {
-      unsubscribeTasks();
-      unsubscribePlans();
-      window.removeEventListener('task-rescheduled', handleReschedule);
-    };
-  }, []);
-
   const fetchData = async (uid) => {
     try {
       const userDoc = await getDocument('users', uid);
@@ -86,11 +35,11 @@ export default function Dashboard() {
         setProductivityScore(userDoc.data().productivityScore || 100);
       }
     } catch (e) {
-      console.error(e);
+      console.error("Error fetching user data:", e);
     }
   };
 
-  const processStatsAndAiCoaching = async (tasksList, uid) => {
+  const processStatsAndAiCoaching = async (tasksList) => {
     const completed = tasksList.filter(t => t.status === 'completed').length;
     const pending = tasksList.filter(t => t.status !== 'completed').length;
     
@@ -119,6 +68,7 @@ export default function Dashboard() {
           setAiTip(`Warning: "${highestRiskTask.title}" has a compliance risk of ${analysis.riskScore}%. ${analysis.reasoning} Recommendation: ${analysis.recommendations[0]}`);
         }
       } catch (e) {
+        console.error("AI coaching error:", e);
         setAiTip(`You have ${riskTasks.length} tasks due soon. Focus on completing them sequentially to keep your productivity high.`);
       } finally {
         setCoachingLoading(false);
@@ -128,6 +78,55 @@ export default function Dashboard() {
       setCoachingLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    // Defer the initial fetch to avoid synchronous setState inside the effect body
+    setTimeout(() => {
+      fetchData(user.uid);
+    }, 0);
+
+    // Stream tasks for live updates
+    const unsubscribeTasks = streamDocuments(
+      'tasks',
+      [whereClause('userId', '==', user.uid)],
+      (snapshot) => {
+        const tasksList = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setTasks(tasksList);
+        processStatsAndAiCoaching(tasksList);
+      }
+    );
+
+    // Stream plans/schedule
+    const unsubscribePlans = streamDocuments(
+      'plans',
+      [whereClause('userId', '==', user.uid)],
+      (snapshot) => {
+        if (snapshot.docs.length > 0) {
+          const planData = snapshot.docs[0].data();
+          const todayStr = new Date().toISOString().split('T')[0];
+          const todayPlan = planData.generatedSchedule?.find(s => s.date === todayStr);
+          setSchedule(todayPlan?.timeBlocks || []);
+        } else {
+          setSchedule([]);
+        }
+      }
+    );
+
+    // Listen to recovery agent reschedule triggers
+    const handleReschedule = () => fetchData(user.uid);
+    window.addEventListener('task-rescheduled', handleReschedule);
+
+    return () => {
+      unsubscribeTasks();
+      unsubscribePlans();
+      window.removeEventListener('task-rescheduled', handleReschedule);
+    };
+  }, [user, navigate]);
 
   // Helper for computing countdown string
   const getCountdownString = (deadlineStr) => {

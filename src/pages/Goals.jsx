@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Target, Plus, CheckCircle, RefreshCw, Flame, BookOpen, User } from 'lucide-react';
-import { queryDocuments, whereClause, createDocument, updateDocument, authInstance, streamDocuments } from '../firebase';
+import { Target, Plus, CheckCircle, RefreshCw, Flame, BookOpen } from 'lucide-react';
+import { whereClause, createDocument, updateDocument, authInstance, streamDocuments } from '../firebase';
 
 export default function Goals() {
   const navigate = useNavigate();
   const [goals, setGoals] = useState([]);
-  const [user, setUser] = useState(null);
+  const [user] = useState(() => authInstance.currentUser);
   
   // Create Goal Form State
   const [title, setTitle] = useState('');
@@ -17,16 +17,14 @@ export default function Goals() {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const currUser = authInstance.currentUser;
-    if (!currUser) {
+    if (!user) {
       navigate('/login');
       return;
     }
-    setUser(currUser);
 
     const unsubscribe = streamDocuments(
       'goals',
-      [whereClause('userId', '==', currUser.uid)],
+      [whereClause('userId', '==', user.uid)],
       (snapshot) => {
         const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         setGoals(list);
@@ -34,7 +32,7 @@ export default function Goals() {
     );
 
     return unsubscribe;
-  }, []);
+  }, [user, navigate]);
 
   const handleCreateGoal = async (e) => {
     e.preventDefault();

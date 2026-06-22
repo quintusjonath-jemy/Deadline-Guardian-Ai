@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { 
   Plus, 
   Clock, 
   Trash2, 
-  CheckCircle2, 
   AlertCircle, 
   ListTodo, 
   ChevronDown, 
@@ -26,7 +25,7 @@ import { generateSubtasks, calculatePriority } from '../gemini';
 
 export default function Tasks() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+  const [user] = useState(() => authInstance.currentUser);
   const [tasks, setTasks] = useState([]);
   const [expandedTaskId, setExpandedTaskId] = useState(null);
 
@@ -40,17 +39,15 @@ export default function Tasks() {
   const [decomposingTaskId, setDecomposingTaskId] = useState(null);
 
   useEffect(() => {
-    const currUser = authInstance.currentUser;
-    if (!currUser) {
+    if (!user) {
       navigate('/login');
       return;
     }
-    setUser(currUser);
 
     // Stream tasks list
     const unsubscribe = streamDocuments(
       'tasks',
-      [whereClause('userId', '==', currUser.uid)],
+      [whereClause('userId', '==', user.uid)],
       (snapshot) => {
         const list = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         // Sort: pending first, then by deadline
@@ -73,7 +70,7 @@ export default function Tasks() {
       unsubscribe();
       window.removeEventListener('task-rescheduled', handleReschedule);
     };
-  }, []);
+  }, [user, navigate]);
 
   const handleCreateTask = async (e) => {
     e.preventDefault();
