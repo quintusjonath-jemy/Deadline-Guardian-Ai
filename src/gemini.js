@@ -455,3 +455,52 @@ Decide which action to take:
     };
   }
 };
+
+export const askAiCoach = async (messages, contextTasks = []) => {
+  const genAI = getGenAIInstance();
+  
+  if (!genAI) {
+    const lastMsg = messages[messages.length - 1]?.content?.toLowerCase() || "";
+    if (lastMsg.includes("exam") || lastMsg.includes("study") || lastMsg.includes("prepare")) {
+      return "To prepare for your exam, I recommend breaking your remaining material into active recall cards. Looking at your syllabus, focus first on the formulas. Spend 50 minutes studying and take a 10-minute break. Shall we schedule a block for this?";
+    }
+    if (lastMsg.includes("hour") || lastMsg.includes("prioritize") || lastMsg.includes("time")) {
+      if (contextTasks.length > 0) {
+        const topTask = contextTasks[0];
+        return `Since you only have a few hours today, you should prioritize "${topTask.title}" which has the highest urgency. I suggest focusing on its first subtask for a 90-minute deep work session. Let's defer your low priority goals to tomorrow.`;
+      }
+      return "With limited time today, focus on high-impact tasks. Do a 25-minute Pomodoro sprint on your most critical item, decline non-essential requests, and turn off notifications.";
+    }
+    return "I am your Deadline Guardian AI coach. I can help you structure your study schedule, prioritize your goals under tight time limits, or create an action plan for upcoming deadlines. What are you working on today?";
+  }
+
+  try {
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash"
+    });
+
+    const systemInstruction = `You are "Guardian Coach", an expert empathetic AI productivity assistant for Deadline Guardian.
+Your goal is to help students, professionals, and entrepreneurs stay on top of their tasks, manage time constraints, plan study/work sessions, and avoid missing deadlines.
+Always sound motivating, structured, and action-oriented. Keep responses concise (around 3-5 sentences) and highly actionable.
+
+Current User Tasks & Deadlines Context:
+${JSON.stringify(contextTasks.map(t => ({
+  title: t.title,
+  description: t.description,
+  deadline: t.deadline,
+  priority: t.priority,
+  estimatedHours: t.estimatedHours,
+  status: t.status,
+  subtasks: t.aiGeneratedSubtasks?.map(s => s.title) || []
+})))}
+
+Please answer the user's latest query, taking into account their task list above if relevant. Provide concrete advice (e.g. time blocks, priorities, Pomodoro suggestions).`;
+
+    const prompt = `${systemInstruction}\n\nUser Question: ${messages[messages.length - 1]?.content}`;
+    const result = await model.generateContent(prompt);
+    return result.response.text();
+  } catch (error) {
+    console.error("Gemini Coach Chat failed:", error);
+    return "I ran into a connection issue with Google AI. However, my advice is to prioritize your high-priority items first and divide your day into focused 25-minute work blocks. What task should we start with?";
+  }
+};

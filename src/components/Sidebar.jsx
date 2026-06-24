@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { 
+  Home,
   LayoutDashboard, 
   CheckSquare, 
   Calendar, 
+  MessageSquare,
   TrendingUp, 
   Target, 
   Settings, 
   LogOut, 
   BrainCircuit
 } from 'lucide-react';
-import { logoutUser, subscribeToAuth, getDocument } from '../firebase';
+import { logoutUser, subscribeToAuth, streamDocuments, whereClause } from '../firebase';
 
 export default function Sidebar() {
   const navigate = useNavigate();
@@ -18,21 +20,31 @@ export default function Sidebar() {
   const [score, setScore] = useState(100);
 
   useEffect(() => {
-    const unsubscribe = subscribeToAuth(async (currUser) => {
+    let unsubscribeUser = null;
+    
+    const unsubscribeAuth = subscribeToAuth((currUser) => {
       setUser(currUser);
       if (currUser) {
-        // Retrieve productivity score from users database
-        try {
-          const userDoc = await getDocument('users', currUser.uid);
-          if (userDoc && userDoc.exists()) {
-            setScore(userDoc.data().productivityScore || 100);
+        // Stream the user profile in real-time to sync productivity score
+        unsubscribeUser = streamDocuments(
+          'users',
+          [whereClause('uid', '==', currUser.uid)],
+          (snapshot) => {
+            if (snapshot.docs.length > 0) {
+              setScore(snapshot.docs[0].data().productivityScore || 100);
+            }
           }
-        } catch (e) {
-          console.error("Error reading user details:", e);
-        }
+        );
+      } else {
+        if (unsubscribeUser) unsubscribeUser();
+        setScore(100);
       }
     });
-    return unsubscribe;
+
+    return () => {
+      unsubscribeAuth();
+      if (unsubscribeUser) unsubscribeUser();
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -45,11 +57,13 @@ export default function Sidebar() {
   };
 
   const navItems = [
-    { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+    { name: 'Landing Page', path: '/', icon: Home },
+    { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
     { name: 'Tasks & AI Breakdown', path: '/tasks', icon: CheckSquare },
     { name: 'Smart Planner', path: '/planner', icon: Calendar },
+    { name: 'AI Coach Chat', path: '/coach', icon: MessageSquare },
     { name: 'Calendar Sync', path: '/calendar', icon: Calendar },
-    { name: 'Goals & Habits', path: '/goals', icon: Target },
+    { name: 'Habit Tracker', path: '/habits', icon: Target },
     { name: 'Risk Analytics', path: '/analytics', icon: TrendingUp },
     { name: 'Settings', path: '/settings', icon: Settings },
   ];

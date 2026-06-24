@@ -161,16 +161,28 @@ export default function Dashboard() {
     return 'bg-brand-green/10 text-brand-green border-brand-green/20';
   };
 
+  const getGreeting = () => {
+    const hrs = new Date().getHours();
+    if (hrs < 12) return 'Good Morning';
+    if (hrs < 18) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
   return (
     <div className="pl-68 pr-8 py-8 min-h-screen">
       {/* Top Banner Greeting */}
       <header className="flex justify-between items-center mb-8">
         <div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">
-            Welcome back, {user?.displayName || 'Guardian pilot'}
+          <h2 className="text-3xl font-extrabold text-white tracking-tight animate-fade-in">
+            {getGreeting()}, {user?.displayName || 'Jemy'} 👋
           </h2>
           <p className="text-slate-400 text-sm mt-1">
-            Let's keep your deadlines safe. Here is your compliance status for today.
+            You have <span className="text-brand-blue font-bold">{stats.pending}</span> active tasks. 
+            {stats.riskCount > 0 ? (
+              <span> <span className="text-brand-red font-bold">{stats.riskCount}</span> tasks need attention today.</span>
+            ) : (
+              " Your schedule looks safe today."
+            )}
           </p>
         </div>
         <div className="flex gap-4">

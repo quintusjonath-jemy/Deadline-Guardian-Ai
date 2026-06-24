@@ -30,6 +30,9 @@ export default {
       },
       fontFamily: {
         sans: ['Outfit', 'Inter', 'sans-serif'],
+      },
+      spacing: {
+        '68': '17rem',
       }
     },
   },

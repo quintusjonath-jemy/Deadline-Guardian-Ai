@@ -16,7 +16,7 @@ export default function Login() {
     setLoading(true);
     try {
       await loginUser(email, password);
-      navigate('/');
+      navigate('/dashboard');
     } catch (e) {
       console.error(e);
       if (e.message.includes('user-not-found') || e.message.includes('wrong-password') || e.message.includes('invalid-credential')) {
@@ -33,10 +33,10 @@ export default function Login() {
     setError('');
     try {
       await loginWithGoogle();
-      navigate('/');
+      navigate('/dashboard');
     } catch (e) {
       console.error(e);
-      setError('Google Sign-In failed.');
+      setError(`Google Sign-In failed: ${e.message || e.code || e}`);
     }
   };
 

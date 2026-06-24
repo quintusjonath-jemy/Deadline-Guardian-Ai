@@ -8,11 +8,13 @@ import VoiceAssistant from './components/VoiceAssistant';
 import RecoveryAgent from './components/RecoveryAgent';
 
 // Pages
+import Landing from './pages/Landing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Tasks from './pages/Tasks';
 import Planner from './pages/Planner';
+import Coach from './pages/Coach';
 import CalendarView from './pages/CalendarView';
 import Goals from './pages/Goals';
 import Analytics from './pages/Analytics';
@@ -51,14 +53,17 @@ export default function App() {
           {/* Page Routing */}
           <main className="transition-all duration-300">
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<Landing />} />
+              <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/tasks" element={<Tasks />} />
               <Route path="/planner" element={<Planner />} />
+              <Route path="/coach" element={<Coach />} />
               <Route path="/calendar" element={<CalendarView />} />
               <Route path="/goals" element={<Goals />} />
+              <Route path="/habits" element={<Goals />} />
               <Route path="/analytics" element={<Analytics />} />
               <Route path="/settings" element={<SettingsPage />} />
-              <Route path="*" element={<Navigate to="/" replace />} />
+              <Route path="*" element={<Navigate to="/dashboard" replace />} />
             </Routes>
           </main>
 
@@ -68,9 +73,10 @@ export default function App() {
         </div>
       ) : (
         <Routes>
+          <Route path="/" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="*" element={<Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       )}
     </BrowserRouter>

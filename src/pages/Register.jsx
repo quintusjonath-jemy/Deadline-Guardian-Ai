@@ -34,7 +34,7 @@ export default function Register() {
         productivityScore: 100,
         createdAt: new Date().toISOString()
       });
-      navigate('/');
+      navigate('/dashboard');
     } catch (e) {
       console.error(e);
       if (e.message.includes('email-already-in-use')) {
