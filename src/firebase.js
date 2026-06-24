@@ -292,3 +292,131 @@ export const orderByClause = (field, direction = 'asc') => {
   }
   return orderBy(field, direction);
 };
+
+export const seedUserDatabase = async (userId) => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  yesterday.setHours(17, 0, 0, 0);
+
+  const nextFriday = new Date();
+  nextFriday.setDate(nextFriday.getDate() + (5 - nextFriday.getDay() + 7) % 7 || 7);
+  nextFriday.setHours(18, 0, 0, 0);
+
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  tomorrow.setHours(14, 0, 0, 0);
+
+  // 1. Update user score to 82
+  await setDocument('users', userId, { 
+    uid: userId,
+    productivityScore: 82,
+    createdAt: new Date().toISOString()
+  });
+
+  // 2. Seed Tasks
+  const sampleTasks = [
+    {
+      id: 'tsk_1_' + userId,
+      userId,
+      title: 'Review physics syllabus and summary sheets',
+      description: 'Need to review equations for midterm exam.',
+      deadline: yesterday.toISOString(),
+      priority: 'high',
+      estimatedHours: 3,
+      status: 'pending',
+      aiGeneratedSubtasks: [
+        { id: 'sub_1a', title: 'Collect formula notebook', status: 'completed', estimatedHours: 0.5 },
+        { id: 'sub_1b', title: 'Solve past mock tests', status: 'pending', estimatedHours: 1.5 },
+        { id: 'sub_1c', title: 'Memorize thermodynamic laws', status: 'pending', estimatedHours: 1 }
+      ],
+      createdAt: yesterday.toISOString()
+    },
+    {
+      id: 'tsk_2_' + userId,
+      userId,
+      title: 'Build React UI for Vibe2Ship Hackathon',
+      description: 'Complete the landing page, analytics dashboard, and voice settings.',
+      deadline: nextFriday.toISOString(),
+      priority: 'high',
+      estimatedHours: 6,
+      status: 'in_progress',
+      aiGeneratedSubtasks: [
+        { id: 'sub_2a', title: 'Configure project routers', status: 'completed', estimatedHours: 1 },
+        { id: 'sub_2b', title: 'Write glassmorphic component libraries', status: 'completed', estimatedHours: 1.5 },
+        { id: 'sub_2c', title: 'Integrate browser speech synthesis', status: 'pending', estimatedHours: 1.5 },
+        { id: 'sub_2d', title: 'Test production deployment hosting', status: 'pending', estimatedHours: 2 }
+      ],
+      createdAt: new Date().toISOString()
+    },
+    {
+      id: 'tsk_3_' + userId,
+      userId,
+      title: 'Prepare Vibe2Ship submission slideshow',
+      description: 'Build slides showing Problem Selected, Tech Stack, and Agentic Depth highlights.',
+      deadline: tomorrow.toISOString(),
+      priority: 'medium',
+      estimatedHours: 2.5,
+      status: 'pending',
+      aiGeneratedSubtasks: [
+        { id: 'sub_3a', title: 'Write outline summary docs', status: 'pending', estimatedHours: 1 },
+        { id: 'sub_3b', title: 'Design slide layouts', status: 'pending', estimatedHours: 1.5 }
+      ],
+      createdAt: new Date().toISOString()
+    }
+  ];
+
+  for (const t of sampleTasks) {
+    await setDocument('tasks', t.id, t);
+  }
+
+  // 3. Seed Goals
+  const sampleGoals = [
+    {
+      goalId: 'go_1_' + userId,
+      userId,
+      title: 'Maintain 90% Deadline Compliance',
+      category: 'career',
+      targetDate: nextFriday.toISOString(),
+      progress: 82,
+      habits: [
+        { name: 'Plan daily focus sessions', frequency: 'daily', history: [yesterday.toISOString().split('T')[0]] },
+        { name: 'Perform weekly risk checks', frequency: 'weekly', history: [] }
+      ]
+    },
+    {
+      goalId: 'go_2_' + userId,
+      userId,
+      title: 'Learn Advanced Gemini Integration',
+      category: 'study',
+      targetDate: new Date(new Date().getTime() + 14 * 24 * 60 * 60 * 1000).toISOString(),
+      progress: 40,
+      habits: [
+        { name: 'Read AI SDK docs for 15m', frequency: 'daily', history: [yesterday.toISOString().split('T')[0]] }
+      ]
+    }
+  ];
+
+  for (const g of sampleGoals) {
+    await setDocument('goals', g.goalId, g);
+  }
+
+  // 4. Seed Plans
+  const todayStr = new Date().toISOString().split('T')[0];
+  const samplePlan = {
+    planId: 'pl_1_' + userId,
+    userId,
+    generatedSchedule: [
+      {
+        date: todayStr,
+        timeBlocks: [
+          { startTime: '10:00', endTime: '11:30', taskId: 'tsk_2_' + userId, subtaskId: 'sub_2c', taskTitle: 'Build React UI for Vibe2Ship', subtaskTitle: 'Integrate browser speech synthesis' },
+          { startTime: '14:00', endTime: '15:30', taskId: 'tsk_3_' + userId, subtaskId: 'sub_3a', taskTitle: 'Prepare submission slideshow', subtaskTitle: 'Write outline summary docs' }
+        ]
+      }
+    ],
+    progress: 0.5,
+    updatedAt: new Date().toISOString()
+  };
+
+  await setDocument('plans', samplePlan.planId, samplePlan);
+};

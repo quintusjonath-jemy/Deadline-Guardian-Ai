@@ -9,7 +9,7 @@ import {
   ChevronRight,
   ShieldCheck
 } from 'lucide-react';
-import { whereClause, getDocument, authInstance, streamDocuments } from '../firebase';
+import { whereClause, getDocument, authInstance, streamDocuments, seedUserDatabase } from '../firebase';
 import { analyzeDeadlineRisk } from '../gemini';
 
 export default function Dashboard() {
@@ -27,6 +27,20 @@ export default function Dashboard() {
     riskCount: 0,
     streak: 3
   });
+  const [seeding, setSeeding] = useState(false);
+
+  const handleSeedData = async () => {
+    if (!user) return;
+    setSeeding(true);
+    try {
+      await seedUserDatabase(user.uid);
+      await fetchData(user.uid);
+    } catch (e) {
+      console.error("Failed to seed database:", e);
+    } finally {
+      setSeeding(false);
+    }
+  };
 
   const fetchData = async (uid) => {
     try {
@@ -170,6 +184,29 @@ export default function Dashboard() {
           </div>
         </div>
       </header>
+
+      {tasks.length === 0 && (
+        <div className="glass-panel border border-brand-blue/30 rounded-2xl p-6 mb-8 bg-brand-blue/5 flex flex-col sm:flex-row items-center justify-between gap-4 animate-fade-in">
+          <div className="flex gap-4 items-center text-left">
+            <div className="bg-brand-blue/15 text-brand-blue p-3.5 rounded-xl border border-brand-blue/20 shrink-0">
+              <Sparkles className="w-6 h-6 animate-pulse" />
+            </div>
+            <div>
+              <h4 className="text-lg font-bold text-white">Populate Sandbox Data</h4>
+              <p className="text-sm text-slate-400 mt-0.5">
+                Your Firestore database is currently empty. Click the button to load sample tasks, subtasks, habits, and an AI planner schedule to see the app in action!
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={handleSeedData}
+            disabled={seeding}
+            className="glass-btn-primary py-2.5 px-6 font-semibold shrink-0"
+          >
+            {seeding ? 'Populating...' : '✨ Load Sample Data'}
+          </button>
+        </div>
+      )}
 
       {/* Main Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
