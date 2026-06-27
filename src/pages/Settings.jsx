@@ -36,7 +36,7 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="pl-68 pr-8 py-8 min-h-screen bg-app-bg max-w-4xl">
+    <div className="pl-68 pr-8 py-8 min-h-screen bg-app-bg">
       {/* Header */}
       <header className="mb-8">
         <h2 className="text-3xl font-extrabold text-app-dark tracking-tight">Configuration Settings</h2>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { subscribeToAuth } from './firebase';
 
 // Components
@@ -19,6 +19,39 @@ import CalendarView from './pages/CalendarView';
 import Goals from './pages/Goals';
 import Analytics from './pages/Analytics';
 import SettingsPage from './pages/Settings';
+
+function AppContent({ user }) {
+  const location = useLocation();
+  const isLanding = location.pathname === '/';
+
+  return (
+    <div className="min-h-screen bg-[#080B11] relative">
+      {/* Main Layout Navigation - Hidden on Landing page */}
+      {!isLanding && <Sidebar />}
+
+      {/* Page Routing */}
+      <main className="transition-all duration-300">
+        <Routes>
+          <Route path="/" element={<Landing />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/planner" element={<Planner />} />
+          <Route path="/coach" element={<Coach />} />
+          <Route path="/calendar" element={<CalendarView />} />
+          <Route path="/goals" element={<Goals />} />
+          <Route path="/habits" element={<Goals />} />
+          <Route path="/analytics" element={<Analytics />} />
+          <Route path="/settings" element={<SettingsPage />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </main>
+
+      {/* Autonomous AI Assistants - Hidden on Landing page */}
+      {!isLanding && <VoiceAssistant />}
+      {!isLanding && <RecoveryAgent />}
+    </div>
+  );
+}
 
 export default function App() {
   const [user, setUser] = useState(null);
@@ -46,31 +79,7 @@ export default function App() {
   return (
     <BrowserRouter>
       {user ? (
-        <div className="min-h-screen bg-[#080B11] relative">
-          {/* Main Layout Navigation */}
-          <Sidebar />
-
-          {/* Page Routing */}
-          <main className="transition-all duration-300">
-            <Routes>
-              <Route path="/" element={<Landing />} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/tasks" element={<Tasks />} />
-              <Route path="/planner" element={<Planner />} />
-              <Route path="/coach" element={<Coach />} />
-              <Route path="/calendar" element={<CalendarView />} />
-              <Route path="/goals" element={<Goals />} />
-              <Route path="/habits" element={<Goals />} />
-              <Route path="/analytics" element={<Analytics />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
-          </main>
-
-          {/* Autonomous AI Assistants */}
-          <VoiceAssistant />
-          <RecoveryAgent />
-        </div>
+        <AppContent user={user} />
       ) : (
         <Routes>
           <Route path="/" element={<Landing />} />
