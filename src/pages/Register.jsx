@@ -84,7 +84,7 @@ export default function Register() {
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Your Name</label>
             <div className="relative">
-              <User className="absolute left-3 top-3 w-4.5 h-4.5 text-slate-500" />
+              <User className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="text"
                 required
@@ -99,7 +99,7 @@ export default function Register() {
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-3 w-4.5 h-4.5 text-slate-500" />
+              <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="email"
                 required
@@ -114,7 +114,7 @@ export default function Register() {
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 w-4.5 h-4.5 text-slate-500" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="password"
                 required
@@ -129,7 +129,7 @@ export default function Register() {
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Confirm Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 w-4.5 h-4.5 text-slate-500" />
+              <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input
                 type="password"
                 required
