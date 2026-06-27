@@ -98,17 +98,17 @@ export default function Analytics() {
   };
 
   const getPriorityRiskBadge = (level) => {
-    if (level === 'Critical' || level === 'High') return 'bg-brand-red/15 text-brand-red border border-brand-red/35';
-    if (level === 'Medium') return 'bg-brand-yellow/15 text-brand-yellow border border-brand-yellow/35';
-    return 'bg-brand-green/15 text-brand-green border border-brand-green/35';
+    if (level === 'Critical' || level === 'High') return 'bg-danger/15 text-danger border border-brand-red/35';
+    if (level === 'Medium') return 'bg-brand-yellow/15 text-warning border border-brand-yellow/35';
+    return 'bg-success/15 text-success border border-brand-green/35';
   };
 
   return (
-    <div className="pl-68 pr-8 py-8 min-h-screen">
+    <div className="pl-68 pr-8 py-8 min-h-screen bg-app-bg">
       
       {/* Header */}
       <header className="mb-8">
-        <h2 className="text-3xl font-extrabold text-white tracking-tight">Deadline Risk Analytics</h2>
+        <h2 className="text-3xl font-extrabold text-app-dark tracking-tight">Deadline Risk Analytics</h2>
         <p className="text-slate-400 text-sm mt-1">
           Proactive vulnerability scanning and predictive completion metrics.
         </p>
@@ -117,9 +117,9 @@ export default function Analytics() {
       {/* Analytics Charts Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
         {/* Compliance Trend Chart */}
-        <section className="glass-panel rounded-2xl border border-slate-800 p-6">
+        <section className="glass-card p-6">
           <h3 className="font-extrabold text-sm text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <Activity className="w-4 h-4 text-brand-blue" />
+            <Activity className="w-4 h-4 text-primary" />
             <span>Productivity Score Trend</span>
           </h3>
           
@@ -145,9 +145,9 @@ export default function Analytics() {
         </section>
 
         {/* Task Volume Distribution */}
-        <section className="glass-panel rounded-2xl border border-slate-800 p-6">
+        <section className="glass-card p-6">
           <h3 className="font-extrabold text-sm text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-brand-green" />
+            <TrendingUp className="w-4 h-4 text-success" />
             <span>Workspace Load Volume</span>
           </h3>
 
@@ -175,7 +175,7 @@ export default function Analytics() {
       <section className="grid grid-cols-1 xl:grid-cols-3 gap-8">
         
         {/* Task List selector (1/3 width) */}
-        <div className="glass-panel rounded-2xl border border-slate-800 p-6 xl:col-span-1">
+        <div className="glass-card p-6 xl:col-span-1">
           <h3 className="font-extrabold text-sm text-slate-400 uppercase tracking-widest mb-4">
             Deadline compliance Scan
           </h3>
@@ -190,8 +190,8 @@ export default function Analytics() {
                   onClick={() => triggerRiskAnalysis(task)}
                   className={`p-3 rounded-xl border text-xs cursor-pointer select-none transition-all ${
                     selectedTaskRisk === task.id 
-                      ? 'bg-brand-blue/10 border-brand-blue' 
-                      : 'bg-slate-900/40 border-slate-850 hover:border-slate-800'
+                      ? 'bg-primary/10 border-primary' 
+                      : 'bg-white/80 border-slate-850 hover:border-slate-200'
                   }`}
                 >
                   <div className="flex justify-between items-start gap-3">
@@ -206,22 +206,22 @@ export default function Analytics() {
         </div>
 
         {/* Gemini risk Analysis Panel (2/3 width) */}
-        <div className="glass-panel rounded-2xl border border-slate-800 p-6 xl:col-span-2 flex flex-col justify-between min-h-[350px]">
+        <div className="glass-card p-6 xl:col-span-2 flex flex-col justify-between min-h-[350px]">
           <div>
             <h3 className="font-extrabold text-sm text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-1.5">
-              <ShieldAlert className="w-4.5 h-4.5 text-brand-blue" />
+              <ShieldAlert className="w-4.5 h-4.5 text-primary" />
               <span>AI Compliancy Assessment</span>
             </h3>
 
             {isLoadingRisk ? (
-              <div className="py-20 flex flex-col items-center justify-center gap-3 text-xs text-brand-blue">
+              <div className="py-20 flex flex-col items-center justify-center gap-3 text-xs text-primary">
                 <RefreshCw className="w-6 h-6 animate-spin" />
                 <span>Running risk simulation models...</span>
               </div>
             ) : riskDetails ? (
               <div className="space-y-5">
                 {/* Risk score pill */}
-                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-900/30 border border-slate-800 rounded-xl">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 bg-slate-50 border border-slate-200 rounded-xl">
                   <div>
                     <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest block">Predictive Risk Level</span>
                     <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold mt-1.5 ${getPriorityRiskBadge(riskDetails.riskLevel)}`}>
@@ -240,8 +240,8 @@ export default function Analytics() {
                   <h4 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5">AI-Prescribed Mitigation Steps</h4>
                   <div className="space-y-2">
                     {riskDetails.recommendations?.map((rec, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-950/20 border border-slate-850 text-xs text-slate-300">
-                        <AlertCircle className="w-4 h-4 text-brand-yellow shrink-0 mt-0.5" />
+                      <div key={idx} className="flex items-start gap-2.5 p-2.5 rounded-lg bg-slate-950/20 border border-slate-850 text-xs text-slate-600">
+                        <AlertCircle className="w-4 h-4 text-warning shrink-0 mt-0.5" />
                         <span>{rec}</span>
                       </div>
                     ))}
@@ -259,7 +259,7 @@ export default function Analytics() {
             <span>Powered by Gemini 2.5 predictive analysis</span>
             <button 
               onClick={() => navigate('/planner')}
-              className="font-bold text-brand-blue hover:underline flex items-center gap-1"
+              className="font-bold text-primary hover:underline flex items-center gap-1"
             >
               Re-schedule this task <ArrowRight className="w-3.5 h-3.5" />
             </button>

@@ -48,28 +48,32 @@ export default function Register() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md glass-panel rounded-2xl border border-slate-800 p-8 flex flex-col gap-6 shadow-2xl relative">
+    <main className="min-h-screen flex items-center justify-center p-6 bg-app-bg relative overflow-hidden">
+      <div className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[120px] -z-10"
+           style={{ background: 'radial-gradient(circle, rgba(14,165,233,0.10), transparent 70%)' }} />
+      <div className="absolute bottom-0 left-0 w-80 h-80 rounded-full blur-[120px] -z-10"
+           style={{ background: 'radial-gradient(circle, rgba(20,184,166,0.08), transparent 70%)' }} />
+
+      <div className="w-full max-w-md glass-card p-8 flex flex-col gap-6 shadow-card animate-slide-up">
         {/* Decorative background glow */}
         <div className="absolute -top-12 -left-12 w-32 h-32 bg-brand-blue/10 rounded-full blur-3xl"></div>
         <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-brand-red/5 rounded-full blur-3xl"></div>
 
         {/* Brand Header */}
-        <div className="flex flex-col items-center gap-2 text-center">
-          <div className="bg-brand-blue/15 text-brand-blue p-3.5 rounded-xl border border-brand-blue/20">
-            <BrainCircuit className="w-8 h-8 animate-pulse-glow" />
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-ocean"
+               style={{ background: 'linear-gradient(135deg, #0EA5E9, #14B8A6)' }}>
+            <BrainCircuit className="w-7 h-7 text-white animate-pulse-glow" />
           </div>
-          <h2 className="font-extrabold text-2xl bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent mt-2">
-            Create Account
-          </h2>
-          <p className="text-slate-400 text-xs">
+          <h2 className="font-extrabold text-2xl text-app-dark mt-1">Create Account</h2>
+          <p className="text-slate-500 text-xs">
             Start protecting your deadlines with active AI planning.
           </p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="bg-brand-red/10 border border-brand-red/30 rounded-lg p-3 text-xs text-brand-red flex items-center gap-2.5">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-xs text-red-600 flex items-center gap-2.5">
             <ShieldAlert className="w-4 h-4" />
             <span>{error}</span>
           </div>
@@ -147,9 +151,9 @@ export default function Register() {
         </form>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-400 mt-2">
+          <p className="text-center text-xs text-slate-500 mt-1">
           Already have an account?{' '}
-          <Link to="/login" className="text-brand-blue font-semibold hover:underline">
+          <Link to="/login" className="text-primary font-semibold hover:underline">
             Sign In
           </Link>
         </p>

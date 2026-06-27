@@ -86,7 +86,7 @@ export default function CalendarView() {
     
     // Empty padding cells for previous month
     for (let i = 0; i < firstDayIndex; i++) {
-      cells.push(<div key={`empty-${i}`} className="p-2 border border-slate-800/40 min-h-16 bg-slate-950/10"></div>);
+      cells.push(<div key={`empty-${i}`} className="p-2 border border-slate-200/40 min-h-16 bg-slate-950/10"></div>);
     }
 
     // Days of current month
@@ -102,10 +102,10 @@ export default function CalendarView() {
           key={`day-${day}`}
           onClick={() => setSelectedDay(day)}
           className={`p-2 border border-slate-850 min-h-20 flex flex-col justify-between cursor-pointer transition-colors relative ${
-            isToday ? 'bg-brand-blue/5 border-brand-blue/30' : 'bg-slate-900/10 hover:bg-slate-900/40'
-          } ${isSelected ? 'border-brand-blue bg-slate-900/30' : ''}`}
+            isToday ? 'bg-primary/5 border-primary/30' : 'bg-slate-900/10 hover:bg-white/80'
+          } ${isSelected ? 'border-primary bg-slate-50' : ''}`}
         >
-          <span className={`text-xs font-bold ${isToday ? 'text-brand-blue' : 'text-slate-400'}`}>{day}</span>
+          <span className={`text-xs font-bold ${isToday ? 'text-primary' : 'text-slate-400'}`}>{day}</span>
           
           {dayTasks.length > 0 && (
             <div className="flex flex-col gap-1 mt-1">
@@ -114,10 +114,10 @@ export default function CalendarView() {
                   key={task.id} 
                   className={`text-[9px] px-1 py-0.5 rounded truncate font-semibold border ${
                     task.status === 'completed' 
-                      ? 'bg-slate-900/80 text-slate-500 border-slate-800' 
+                      ? 'bg-slate-900/80 text-slate-500 border-slate-200' 
                       : task.priority === 'high' 
-                        ? 'bg-brand-red/10 text-brand-red border-brand-red/20' 
-                        : 'bg-brand-blue/10 text-brand-blue border-brand-blue/20'
+                        ? 'bg-danger/10 text-danger border-brand-red/20' 
+                        : 'bg-primary/10 text-primary border-primary/20'
                   }`}
                   title={task.title}
                 >
@@ -137,12 +137,12 @@ export default function CalendarView() {
   };
 
   return (
-    <div className="pl-68 pr-8 py-8 min-h-screen">
+    <div className="pl-68 pr-8 py-8 min-h-screen bg-app-bg">
       
       {/* Header */}
       <header className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">Calendar Workspace</h2>
+          <h2 className="text-3xl font-extrabold text-app-dark tracking-tight">Calendar Workspace</h2>
           <p className="text-slate-400 text-sm mt-1">Overview of milestones and Google Calendar integration status.</p>
         </div>
 
@@ -150,15 +150,15 @@ export default function CalendarView() {
         <div className="flex items-center gap-3">
           <div className="text-right">
             <span className="text-[9px] text-slate-500 font-bold uppercase tracking-widest block">Google Calendar Sync</span>
-            <span className="text-xs font-bold text-brand-green">{syncStatus}</span>
+            <span className="text-xs font-bold text-success">{syncStatus}</span>
           </div>
           <button
             onClick={handleGoogleSync}
             disabled={isSyncing}
-            className="p-2.5 rounded-lg border border-slate-800 bg-slate-900 hover:bg-slate-800 text-slate-300 transition-colors flex items-center gap-2"
+            className="p-2.5 rounded-lg border border-slate-200 bg-slate-900 hover:bg-slate-800 text-slate-300 transition-colors flex items-center gap-2"
             title="Force Sync Now"
           >
-            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-brand-blue' : ''}`} />
+            <RefreshCw className={`w-4 h-4 ${isSyncing ? 'animate-spin text-primary' : ''}`} />
             <span className="text-xs font-bold">Sync Now</span>
           </button>
         </div>
@@ -168,9 +168,9 @@ export default function CalendarView() {
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-8">
         
         {/* Month Calendar Grid (3/4 width) */}
-        <section className="xl:col-span-3 glass-panel rounded-2xl border border-slate-800 p-6">
+        <section className="xl:col-span-3 glass-card p-6">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-extrabold text-lg text-slate-200">
+            <h3 className="font-extrabold text-lg text-slate-700">
               {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
             </h3>
 
@@ -191,7 +191,7 @@ export default function CalendarView() {
           </div>
 
           {/* Day Labels */}
-          <div className="grid grid-cols-7 text-center text-xs font-bold text-slate-500 uppercase tracking-widest py-2 border-b border-slate-800">
+          <div className="grid grid-cols-7 text-center text-xs font-bold text-slate-500 uppercase tracking-widest py-2 border-b border-slate-200">
             <div>Sun</div>
             <div>Mon</div>
             <div>Tue</div>
@@ -209,7 +209,7 @@ export default function CalendarView() {
 
         {/* Selected Day Details Panel (1/4 width) */}
         <section className="xl:col-span-1 space-y-6">
-          <div className="glass-panel rounded-2xl border border-slate-800 p-6 min-h-64 flex flex-col justify-between">
+          <div className="glass-card p-6 min-h-64 flex flex-col justify-between">
             <div>
               <h3 className="font-extrabold text-sm text-slate-400 uppercase tracking-widest mb-4">
                 Selected Day Details
@@ -217,7 +217,7 @@ export default function CalendarView() {
 
               {selectedDay ? (
                 <div>
-                  <p className="text-base font-extrabold text-slate-200">
+                  <p className="text-base font-extrabold text-slate-700">
                     {monthNames[currentDate.getMonth()]} {selectedDay}, {currentDate.getFullYear()}
                   </p>
                   
@@ -229,11 +229,11 @@ export default function CalendarView() {
                         <div 
                           key={task.id} 
                           onClick={() => navigate('/tasks')}
-                          className="p-2.5 bg-slate-950/40 hover:bg-slate-900 border border-slate-850 hover:border-slate-700 rounded-lg cursor-pointer transition-colors"
+                          className="p-2.5 bg-slate-950/40 hover:bg-slate-900 border border-slate-850 hover:border-slate-200 rounded-lg cursor-pointer transition-colors"
                         >
                           <h4 className="text-xs font-bold text-slate-200 truncate">{task.title}</h4>
                           <span className="text-[10px] text-slate-500 mt-1 block">
-                            Status: <span className={task.status === 'completed' ? 'text-brand-green' : 'text-brand-blue'}>{task.status}</span>
+                            Status: <span className={task.status === 'completed' ? 'text-success' : 'text-primary'}>{task.status}</span>
                           </span>
                         </div>
                       ))

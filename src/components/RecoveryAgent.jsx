@@ -109,13 +109,13 @@ export default function RecoveryAgent() {
   return (
     <div className="fixed bottom-6 left-6 max-w-sm glass-panel border border-brand-red/30 rounded-xl shadow-2xl z-40 p-4 animate-fade-in">
       <div className="flex justify-between items-start mb-3">
-        <div className="flex items-center gap-2 text-brand-red font-bold text-sm">
-          <ShieldAlert className="w-5 h-5 text-brand-red animate-pulse" />
+        <div className="flex items-center gap-2 text-danger font-bold text-sm">
+          <ShieldAlert className="w-5 h-5 text-danger animate-pulse" />
           <span>Deadline Compliance Alert</span>
         </div>
         <button 
           onClick={() => setIsOpen(false)}
-          className="text-slate-500 hover:text-slate-200"
+          className="text-slate-500 hover:text-slate-700"
         >
           <X className="w-4 h-4" />
         </button>
@@ -126,7 +126,7 @@ export default function RecoveryAgent() {
           I detected that deadlines for <span className="font-semibold text-slate-100">{missedTasks.length} task(s)</span> have passed without completion:
         </p>
         
-        <ul className="text-xs text-slate-400 list-disc list-inside max-h-20 overflow-y-auto bg-slate-950/40 p-2 rounded border border-slate-800">
+        <ul className="text-xs text-slate-400 list-disc list-inside max-h-20 overflow-y-auto bg-slate-950/40 p-2 rounded border border-slate-200">
           {missedTasks.map(t => (
             <li key={t.id} className="truncate">{t.title}</li>
           ))}
@@ -134,16 +134,16 @@ export default function RecoveryAgent() {
 
         {isLoading ? (
           <div className="flex items-center gap-2 justify-center py-2 text-xs text-slate-400">
-            <RefreshCw className="w-4 h-4 animate-spin text-brand-blue" />
+            <RefreshCw className="w-4 h-4 animate-spin text-primary" />
             <span>Formulating recovery proposal...</span>
           </div>
         ) : (
           recoveryProposal && (
-            <div className="bg-brand-blue/5 border border-brand-blue/20 rounded p-2.5 space-y-2">
+            <div className="bg-primary/5 border border-primary/20 rounded p-2.5 space-y-2">
               <p className="text-xs italic text-slate-300">
                 "{recoveryProposal.message}"
               </p>
-              <p className="text-[10px] text-brand-blue font-bold uppercase tracking-wider">
+              <p className="text-[10px] text-primary font-bold uppercase tracking-wider">
                 Suggested Action: {recoveryProposal.actionSuggested}
               </p>
             </div>

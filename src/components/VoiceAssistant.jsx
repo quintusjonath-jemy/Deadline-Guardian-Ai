@@ -162,7 +162,7 @@ export default function VoiceAssistant() {
         title="AI Voice Assistant"
       >
         <Mic className="w-6 h-6 group-hover:rotate-12 transition-transform duration-300" />
-        <span className="absolute right-16 px-2 py-1 rounded bg-slate-900 border border-slate-800 text-[10px] text-brand-blue font-bold tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
+        <span className="absolute right-16 px-2 py-1 rounded bg-slate-900 border border-slate-200 text-[10px] text-primary font-bold tracking-wider uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap">
           Talk to Guardian
         </span>
       </button>
@@ -170,7 +170,7 @@ export default function VoiceAssistant() {
       {/* Assistant Voice Modal Overlay */}
       {isOpen && (
         <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="w-full max-w-md glass-panel rounded-2xl border border-slate-800 p-6 flex flex-col items-center gap-6 relative shadow-2xl animate-fade-in">
+          <div className="w-full max-w-md glass-card p-6 flex flex-col items-center gap-6 relative shadow-2xl animate-fade-in">
             {/* Close Button */}
             <button 
               onClick={() => {
@@ -185,15 +185,15 @@ export default function VoiceAssistant() {
 
             {/* Avatar Header */}
             <div className="flex flex-col items-center gap-2">
-              <div className="w-16 h-16 rounded-full bg-brand-blue/10 border border-brand-blue/30 flex items-center justify-center text-brand-blue shadow-inner relative">
+              <div className="w-16 h-16 rounded-full bg-primary/10 border border-primary/30 flex items-center justify-center text-primary shadow-inner relative">
                 {isListening ? (
-                  <div className="absolute inset-0 rounded-full border border-brand-blue/40 animate-ping opacity-75"></div>
+                  <div className="absolute inset-0 rounded-full border border-primary/40 animate-ping opacity-75"></div>
                 ) : null}
                 <BrainCircuit className={`w-8 h-8 ${isListening ? 'animate-pulse text-cyan-400' : ''}`} />
               </div>
               <h3 className="font-bold text-lg text-slate-100 mt-2">Guardian Voice Assistant</h3>
               {!isSupported && (
-                <span className="text-[10px] bg-brand-red/20 text-brand-red font-bold px-2 py-0.5 rounded">
+                <span className="text-[10px] bg-brand-red/20 text-danger font-bold px-2 py-0.5 rounded">
                   Speech Not Supported in Browser
                 </span>
               )}
@@ -211,7 +211,7 @@ export default function VoiceAssistant() {
             )}
 
             {/* Transcript & Response Area */}
-            <div className="w-full bg-slate-900/50 border border-slate-800 rounded-xl p-4 min-h-32 flex flex-col gap-4 text-sm justify-between">
+            <div className="w-full bg-slate-900/50 border border-slate-200 rounded-xl p-4 min-h-32 flex flex-col gap-4 text-sm justify-between">
               <div>
                 <p className="text-[10px] text-slate-500 font-bold tracking-wider uppercase mb-1">User Command</p>
                 <p className={`italic ${transcript ? 'text-slate-200' : 'text-slate-500'}`}>
@@ -219,10 +219,10 @@ export default function VoiceAssistant() {
                 </p>
               </div>
               
-              <div className="border-t border-slate-800 pt-3">
-                <p className="text-[10px] text-brand-blue font-bold tracking-wider uppercase mb-1">Guardian Reply</p>
+              <div className="border-t border-slate-200 pt-3">
+                <p className="text-[10px] text-primary font-bold tracking-wider uppercase mb-1">Guardian Reply</p>
                 <div className="flex gap-2 text-slate-300">
-                  <Volume2 className="w-4 h-4 shrink-0 mt-0.5 text-brand-blue" />
+                  <Volume2 className="w-4 h-4 shrink-0 mt-0.5 text-primary" />
                   <p>{response || 'Awaiting your command...'}</p>
                 </div>
               </div>

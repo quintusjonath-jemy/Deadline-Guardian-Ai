@@ -177,29 +177,30 @@ export default function Login() {
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-md glass-panel rounded-2xl border border-slate-800 p-8 flex flex-col gap-6 shadow-2xl relative">
-        
-        {/* Decorative background glow */}
-        <div className="absolute -top-12 -left-12 w-32 h-32 bg-brand-blue/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-12 -right-12 w-32 h-32 bg-brand-red/5 rounded-full blur-3xl"></div>
+    <main className="min-h-screen flex items-center justify-center p-6 bg-app-bg relative overflow-hidden">
+      {/* Ambient orbs */}
+      <div className="absolute top-0 left-0 w-96 h-96 rounded-full blur-[120px] -z-10"
+           style={{ background: 'radial-gradient(circle, rgba(14,165,233,0.10), transparent 70%)' }} />
+      <div className="absolute bottom-0 right-0 w-80 h-80 rounded-full blur-[120px] -z-10"
+           style={{ background: 'radial-gradient(circle, rgba(20,184,166,0.08), transparent 70%)' }} />
+
+      <div className="w-full max-w-md glass-card p-8 flex flex-col gap-6 shadow-card animate-slide-up">
 
         {/* Brand Header */}
-        <div className="flex flex-col items-center gap-2 text-center">
-          <div className="bg-brand-blue/15 text-brand-blue p-3.5 rounded-xl border border-brand-blue/20">
-            <BrainCircuit className="w-8 h-8 animate-pulse-glow" />
+        <div className="flex flex-col items-center gap-3 text-center">
+          <div className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-ocean"
+               style={{ background: 'linear-gradient(135deg, #0EA5E9, #14B8A6)' }}>
+            <BrainCircuit className="w-7 h-7 text-white animate-pulse-glow" />
           </div>
-          <h2 className="font-extrabold text-2xl bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent mt-2">
-            Deadline Guardian AI
-          </h2>
-          <p className="text-slate-400 text-xs max-w-xs">
+          <h2 className="font-extrabold text-2xl text-app-dark mt-1">Deadline Guardian AI</h2>
+          <p className="text-slate-500 text-xs max-w-xs">
             "An AI productivity companion that doesn't just remind you — it helps you finish."
           </p>
         </div>
 
         {/* Error Alert */}
         {error && (
-          <div className="bg-brand-red/10 border border-brand-red/30 rounded-lg p-3 text-xs text-brand-red flex items-center gap-2.5">
+          <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-xs text-red-600 flex items-center gap-2.5">
             <ShieldAlert className="w-4 h-4 shrink-0" />
             <span>{error}</span>
           </div>
@@ -210,11 +211,11 @@ export default function Login() {
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Email Address</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-3 w-4.5 h-4.5 text-slate-500" />
+              <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
               <input
                 type="email"
                 required
-                className="w-full glass-input pl-10"
+                className="glass-input pl-10"
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -225,11 +226,11 @@ export default function Login() {
           <div className="flex flex-col gap-1.5">
             <label className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Password</label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 w-4.5 h-4.5 text-slate-500" />
+              <Lock className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
               <input
                 type="password"
                 required
-                className="w-full glass-input pl-10"
+                className="glass-input pl-10"
                 placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -246,16 +247,16 @@ export default function Login() {
           </button>
         </form>
 
-        <div className="relative flex items-center justify-center my-1 text-slate-500">
-          <span className="absolute px-3 bg-[#0c101a] text-[10px] font-bold tracking-wider uppercase">or</span>
-          <div className="w-full border-t border-slate-800"></div>
+        <div className="relative flex items-center justify-center my-1">
+          <div className="w-full border-t border-slate-200"></div>
+          <span className="absolute px-3 bg-white text-[10px] font-bold tracking-wider uppercase text-slate-400">or</span>
         </div>
 
         {/* Third-party buttons */}
         <div className="flex flex-col gap-3">
           <button
             onClick={handleGoogleLogin}
-            className="w-full glass-btn-secondary flex items-center justify-center gap-2.5 py-2.5 hover:bg-slate-800/80"
+            className="w-full glass-btn-secondary flex items-center justify-center gap-2.5 py-2.5"
           >
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
@@ -268,16 +269,16 @@ export default function Login() {
 
           <button
             onClick={handleGuestExplore}
-            className="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-cyan-500 to-teal-500 hover:shadow-lg hover:shadow-cyan-500/20 text-white font-bold text-sm text-center active:scale-95 transition-all duration-200"
+            className="w-full glass-btn-primary py-3 px-4 flex items-center justify-center gap-2"
           >
             ⚡ Explore as Guest (Instant Sandbox)
           </button>
         </div>
 
         {/* Footer */}
-        <p className="text-center text-xs text-slate-400 mt-2">
+        <p className="text-center text-xs text-slate-500 mt-1">
           New to the Guardian?{' '}
-          <Link to="/register" className="text-brand-blue font-semibold hover:underline">
+          <Link to="/register" className="text-primary font-semibold hover:underline">
             Create an Account
           </Link>
         </p>

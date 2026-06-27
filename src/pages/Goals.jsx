@@ -98,18 +98,18 @@ export default function Goals() {
   };
 
   const getCategoryIcon = (cat) => {
-    if (cat === 'study') return <BookOpen className="w-5 h-5 text-brand-blue" />;
-    return <Target className="w-5 h-5 text-brand-green" />;
+    if (cat === 'study') return <BookOpen className="w-5 h-5 text-primary" />;
+    return <Target className="w-5 h-5 text-success" />;
   };
 
   return (
-    <div className="pl-68 pr-8 py-8 min-h-screen grid grid-cols-1 xl:grid-cols-3 gap-8">
+    <div className="pl-68 pr-8 py-8 min-h-screen bg-app-bg grid grid-cols-1 xl:grid-cols-3 gap-8">
       
       {/* Goal creation Panel */}
       <section className="xl:col-span-1">
-        <div className="glass-panel rounded-2xl border border-slate-800 p-6 sticky top-8">
+        <div className="glass-card p-6 sticky top-8">
           <h3 className="font-extrabold text-lg text-white mb-6 flex items-center gap-2.5">
-            <Target className="w-5 h-5 text-brand-blue" />
+            <Target className="w-5 h-5 text-primary" />
             <span>Define AI Tracked Goal</span>
           </h3>
 
@@ -191,14 +191,14 @@ export default function Goals() {
       {/* Goal List Workspace */}
       <section className="xl:col-span-2 space-y-4">
         <header className="mb-4">
-          <h2 className="text-2xl font-extrabold text-white">Your Long-term Anchors</h2>
+          <h2 className="text-2xl font-extrabold text-app-dark">Your Long-term Anchors</h2>
           <p className="text-xs text-slate-400">Streak builders. Complete daily habits to progress your goal meters.</p>
         </header>
 
         {goals.length === 0 ? (
-          <div className="py-24 text-center border-2 border-dashed border-slate-800 rounded-2xl bg-slate-900/10">
+          <div className="py-24 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-900/10">
             <Target className="w-10 h-10 text-slate-700 mx-auto mb-3" />
-            <h4 className="text-sm font-semibold text-slate-300">No active goals configured</h4>
+            <h4 className="text-sm font-semibold text-slate-600">No active goals configured</h4>
             <p className="text-xs text-slate-500 max-w-xs mx-auto mt-1">
               Add goals on the left to start building consistency streaks.
             </p>
@@ -208,7 +208,7 @@ export default function Goals() {
             {goals.map((goal) => (
               <div 
                 key={goal.id} 
-                className="glass-panel border border-slate-800 p-5 rounded-xl flex flex-col gap-4 hover:border-slate-700 transition-colors"
+                className="glass-card p-5 rounded-xl flex flex-col gap-4 hover:border-slate-200 transition-colors"
               >
                 {/* Header info */}
                 <div className="flex justify-between items-start gap-4">
@@ -223,14 +223,14 @@ export default function Goals() {
                   </div>
 
                   <div className="text-right">
-                    <span className="text-xs font-bold text-slate-200">{goal.progress}% progress</span>
+                    <span className="text-xs font-bold text-slate-700">{goal.progress}% progress</span>
                   </div>
                 </div>
 
                 {/* Progress bar */}
                 <div className="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden">
                   <div 
-                    className="bg-brand-blue h-full transition-all duration-500" 
+                    className="bg-primary h-full transition-all duration-500" 
                     style={{ width: `${goal.progress}%` }}
                   ></div>
                 </div>
@@ -249,12 +249,12 @@ export default function Goals() {
                           onClick={() => handleToggleHabit(goal.id, idx)}
                           className={`flex items-center justify-between p-2.5 rounded-lg border transition-all duration-150 cursor-pointer select-none text-xs ${
                             isCompletedToday 
-                              ? 'bg-brand-green/5 border-brand-green/20 text-slate-400' 
-                              : 'bg-slate-950/40 border-slate-850 hover:border-slate-800 text-slate-200'
+                              ? 'bg-success/5 border-brand-green/20 text-slate-400' 
+                              : 'bg-slate-950/40 border-slate-850 hover:border-slate-200 text-slate-200'
                           }`}
                         >
                           <div className="flex items-center gap-3">
-                            <CheckCircle className={`w-4 h-4 ${isCompletedToday ? 'text-brand-green fill-brand-green/10' : 'text-slate-600'}`} />
+                            <CheckCircle className={`w-4 h-4 ${isCompletedToday ? 'text-success fill-brand-green/10' : 'text-slate-600'}`} />
                             <span className={isCompletedToday ? 'line-through' : ''}>{habit.name}</span>
                           </div>
                           

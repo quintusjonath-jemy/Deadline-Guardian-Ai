@@ -109,12 +109,12 @@ export default function Planner() {
   };
 
   return (
-    <div className="pl-68 pr-8 py-8 min-h-screen">
+    <div className="pl-68 pr-8 py-8 min-h-screen bg-app-bg">
       
       {/* Header */}
       <header className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
         <div>
-          <h2 className="text-3xl font-extrabold text-white tracking-tight">Smart Planner Workspace</h2>
+          <h2 className="text-3xl font-extrabold text-app-dark tracking-tight">Smart Planner Workspace</h2>
           <p className="text-slate-400 text-sm mt-1">AI-powered time allocation and schedule conflict resolution.</p>
         </div>
 
@@ -139,7 +139,7 @@ export default function Planner() {
 
       {/* Date Navigation Bar */}
       {daysCount > 0 && (
-        <div className="flex justify-between items-center bg-slate-900/60 border border-slate-800 rounded-xl p-3 mb-6">
+        <div className="flex justify-between items-center bg-slate-900/60 border border-slate-200 rounded-xl p-3 mb-6">
           <button 
             disabled={selectedDayIdx === 0}
             onClick={() => setSelectedDayIdx(prev => prev - 1)}
@@ -170,14 +170,14 @@ export default function Planner() {
         
         {/* Active Schedule Timeline (Col span 2) */}
         <section className="lg:col-span-2 space-y-4">
-          <div className="glass-panel rounded-2xl border border-slate-800 p-6">
+          <div className="glass-card p-6">
             <h3 className="font-extrabold text-lg text-slate-200 mb-6 flex items-center gap-2.5">
-              <Calendar className="w-5 h-5 text-brand-blue" />
+              <Calendar className="w-5 h-5 text-primary" />
               <span>Time-Block Roadmap</span>
             </h3>
 
             {!activeDayPlan || !activeDayPlan.timeBlocks || activeDayPlan.timeBlocks.length === 0 ? (
-              <div className="py-24 text-center border-2 border-dashed border-slate-800 rounded-xl bg-slate-900/10">
+              <div className="py-24 text-center border-2 border-dashed border-slate-200 rounded-xl bg-slate-900/10">
                 <AlertCircle className="w-10 h-10 text-slate-600 mx-auto mb-3" />
                 <h4 className="text-sm font-semibold text-slate-400">No scheduled blocks found</h4>
                 <p className="text-xs text-slate-500 max-w-xs mx-auto mt-1">
@@ -185,23 +185,23 @@ export default function Planner() {
                 </p>
               </div>
             ) : (
-              <div className="relative border-l border-slate-800/80 ml-4 pl-8 space-y-6">
+              <div className="relative border-l border-slate-200/80 ml-4 pl-8 space-y-6">
                 {activeDayPlan.timeBlocks.map((block, idx) => (
                   <div key={idx} className="relative group">
                     
                     {/* Time Marker Circle */}
-                    <div className="absolute -left-[41px] top-1.5 w-6 h-6 rounded-full bg-slate-900 border-2 border-brand-blue flex items-center justify-center shrink-0">
-                      <div className="w-2.5 h-2.5 rounded-full bg-brand-blue animate-pulse-glow"></div>
+                    <div className="absolute -left-[41px] top-1.5 w-6 h-6 rounded-full bg-slate-900 border-2 border-primary flex items-center justify-center shrink-0">
+                      <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse-glow"></div>
                     </div>
 
-                    <div className="glass-panel border border-slate-800/70 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 hover:border-slate-700">
+                    <div className="glass-card/70 p-4 rounded-xl flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-200 hover:border-slate-200">
                       <div>
                         {/* Time Block Title */}
                         <div className="flex items-center gap-2">
                           <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider block bg-slate-950 px-2 py-0.5 rounded border border-slate-850">
                             {block.startTime} - {block.endTime}
                           </span>
-                          <span className="text-xs text-brand-blue font-bold tracking-wide">
+                          <span className="text-xs text-primary font-bold tracking-wide">
                             {block.taskTitle}
                           </span>
                         </div>
@@ -214,7 +214,7 @@ export default function Planner() {
                       <div className="flex items-center gap-3">
                         <button
                           onClick={() => navigate('/tasks')}
-                          className="px-3.5 py-1.5 rounded-lg border border-slate-850 hover:border-slate-700 bg-slate-900/60 text-xs text-slate-300 font-bold transition-all"
+                          className="px-3.5 py-1.5 rounded-lg border border-slate-850 hover:border-slate-200 bg-slate-900/60 text-xs text-slate-300 font-bold transition-all"
                         >
                           Focus Milestones
                         </button>
@@ -231,26 +231,26 @@ export default function Planner() {
         <section className="space-y-6">
           
           {/* Guardian Agent Coaching Status */}
-          <div className="glass-panel rounded-2xl border border-slate-800 p-6">
+          <div className="glass-card p-6">
             <h3 className="font-extrabold text-sm text-slate-400 uppercase tracking-widest mb-4">
               Schedule Health
             </h3>
 
             <div className="space-y-4">
-              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-800 flex items-start gap-3">
-                <ShieldCheck className="w-5 h-5 text-brand-green shrink-0 mt-0.5" />
+              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-200 flex items-start gap-3">
+                <ShieldCheck className="w-5 h-5 text-success shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-200">Optimal Distribution</h4>
+                  <h4 className="text-xs font-bold text-slate-700">Optimal Distribution</h4>
                   <p className="text-[10px] text-slate-500 mt-0.5 leading-relaxed">
                     AI blocks are segmented in 1.5-hour study blocks to maximize cognitive load efficiency and reduce task completion risk.
                   </p>
                 </div>
               </div>
 
-              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-800 flex items-start gap-3">
-                <UserCheck className="w-5 h-5 text-brand-blue shrink-0 mt-0.5" />
+              <div className="bg-slate-900/50 rounded-xl p-3 border border-slate-200 flex items-start gap-3">
+                <UserCheck className="w-5 h-5 text-primary shrink-0 mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-200">Buffer Blocks Configured</h4>
+                  <h4 className="text-xs font-bold text-slate-700">Buffer Blocks Configured</h4>
                   <p className="text-[10px] text-slate-500 mt-0.5 leading-relaxed">
                     A default 1-hour rest buffer has been mapped between sessions to accommodate unexpected meeting requests.
                   </p>
@@ -260,9 +260,9 @@ export default function Planner() {
           </div>
 
           {/* Prompting instruction widget */}
-          <div className="glass-panel rounded-2xl border border-slate-800/80 p-6 bg-gradient-to-br from-brand-blue/5 to-transparent relative overflow-hidden">
-            <div className="absolute right-0 bottom-0 w-16 h-16 bg-brand-blue/5 rounded-full blur-xl"></div>
-            <h4 className="text-xs font-bold text-brand-blue tracking-wider uppercase mb-2">PRO TIP</h4>
+          <div className="glass-card/80 p-6 bg-gradient-to-br from-brand-blue/5 to-transparent relative overflow-hidden">
+            <div className="absolute right-0 bottom-0 w-16 h-16 bg-primary/5 rounded-full blur-xl"></div>
+            <h4 className="text-xs font-bold text-primary tracking-wider uppercase mb-2">PRO TIP</h4>
             <p className="text-xs text-slate-300 leading-relaxed">
               Connect your external Google Calendar in the <span className="font-semibold text-white">Settings</span> page. The AI agent will automatically re-allocate blocks to fit inside your calendar schedule gaps.
             </p>

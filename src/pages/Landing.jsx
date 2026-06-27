@@ -9,7 +9,9 @@ import {
   ArrowRight, 
   ShieldCheck, 
   UserCheck, 
-  TrendingUp 
+  TrendingUp,
+  Zap,
+  CheckCircle2
 } from 'lucide-react';
 import { authInstance } from '../firebase';
 
@@ -19,182 +21,271 @@ export default function Landing() {
   const coreProblems = [
     {
       title: "Traditional Apps Only Remind",
-      description: "Standard calendar notification alerts only tell you that a task is due, doing nothing to help you actually execute it.",
+      description: "Standard calendars alert you a task is due, but do nothing to help you actually execute and complete it.",
       icon: Clock,
-      color: "text-brand-red bg-brand-red/10 border-brand-red/20"
+      accent: '#EF4444',
+      bg: 'rgba(239,68,68,0.07)',
+      border: 'rgba(239,68,68,0.18)',
     },
     {
       title: "Task Paralysis & Overwhelm",
-      description: "Huge objectives like 'Build Portfolio Site' cause friction. Without step-by-step breakdowns, starting feels impossible.",
+      description: "Big goals like 'Build Portfolio Site' cause friction. Without step-by-step breakdowns, starting feels impossible.",
       icon: AlertTriangle,
-      color: "text-brand-yellow bg-brand-yellow/10 border-brand-yellow/20"
+      accent: '#F59E0B',
+      bg: 'rgba(245,158,11,0.07)',
+      border: 'rgba(245,158,11,0.18)',
     },
     {
       title: "Burnout & Rigid Timelines",
-      description: "Missed schedule slots accumulate, causing users to throw off their entire planning framework out of stress.",
+      description: "Missed schedule slots accumulate, causing users to abandon their entire planning framework out of stress.",
       icon: TrendingUp,
-      color: "text-rose-500 bg-rose-500/10 border-rose-500/20"
+      accent: '#EF4444',
+      bg: 'rgba(239,68,68,0.05)',
+      border: 'rgba(239,68,68,0.14)',
     }
   ];
 
   const features = [
     {
       title: "AI Task Breakdown Agent",
-      description: "Input any goal (e.g. 'Build a Portfolio Website') and Gemini instantly decomposes it into step-by-step checklists.",
+      description: "Input any goal and Gemini 2.5 Flash instantly decomposes it into executable step-by-step checklists.",
       icon: BrainCircuit,
+      accent: '#0EA5E9',
     },
     {
       title: "Deadline Risk Predictor",
-      description: "Our priority engine evaluates remaining workload hours against available slots to calculate an active risk score.",
+      description: "Our priority engine evaluates remaining workload hours against available slots to calculate live risk scores.",
       icon: ShieldCheck,
+      accent: '#10B981',
     },
     {
       title: "Smart Recovery Agent",
-      description: "Missed yesterday's focus session? The Recovery Agent automatically redistributes your tasks to avoid burnout.",
+      description: "Missed a focus session? The Recovery Agent auto-redistributes your tasks to avoid burnout and keep you on track.",
       icon: UserCheck,
+      accent: '#14B8A6',
     },
     {
       title: "Voice Task Creation",
-      description: "Create plans hands-free. Native Speech Recognition automatically parses titles and deadlines into your agenda.",
+      description: "Create plans hands-free. Native Speech Recognition parses titles and deadlines into your agenda instantly.",
       icon: Mic,
+      accent: '#F59E0B',
     },
     {
       title: "AI Time-Block Planner",
-      description: "AI-generated daily plans block out focus hours for exam revision, development, or syllabus reading automatically.",
+      description: "AI-generated daily plans automatically block out focus hours for every task based on deadline urgency.",
       icon: Calendar,
+      accent: '#06B6D4',
     },
     {
       title: "AI Productivity Coach",
-      description: "A chat companion that knows your exact syllabus, homework, and timelines to give tailored time-saving advice.",
+      description: "A chat companion that knows your exact tasks and timelines to give tailored, personal time-saving advice.",
       icon: Sparkles,
+      accent: '#8B5CF6',
     }
   ];
 
-  return (
-    <div className="min-h-screen text-slate-100 flex flex-col bg-[#020813] relative overflow-hidden">
-      {/* Background glow effects */}
-      <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[140px] -z-10 animate-pulse-glow"></div>
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-brand-green/5 rounded-full blur-[140px] -z-10"></div>
+  const stats = [
+    { label: 'Tasks Managed', value: '2,000+' },
+    { label: 'Deadlines Saved', value: '98%' },
+    { label: 'AI Accuracy', value: '4.9★' },
+    { label: 'Active Users', value: '500+' },
+  ];
 
-      {/* Navigation Header */}
-      <nav className="w-full border-b border-slate-900 bg-[#020813]/60 backdrop-blur-md sticky top-0 z-50 py-4 px-6 md:px-12 flex justify-between items-center">
+  return (
+    <div className="min-h-screen flex flex-col relative overflow-x-hidden"
+         style={{ background: '#F8FAFC' }}>
+
+      {/* ── Ambient background orbs ── */}
+      <div className="absolute top-0 left-0 w-[600px] h-[600px] rounded-full blur-[120px] -z-10 pointer-events-none"
+           style={{ background: 'radial-gradient(circle, rgba(14,165,233,0.08), transparent 70%)' }} />
+      <div className="absolute bottom-0 right-0 w-[500px] h-[500px] rounded-full blur-[120px] -z-10 pointer-events-none"
+           style={{ background: 'radial-gradient(circle, rgba(20,184,166,0.07), transparent 70%)' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] rounded-full blur-[160px] -z-10 pointer-events-none"
+           style={{ background: 'radial-gradient(ellipse, rgba(6,182,212,0.04), transparent 70%)' }} />
+
+      {/* ── NAVIGATION ── */}
+      <nav className="sticky top-0 z-50 w-full border-b border-slate-200/60 backdrop-blur-xl py-4 px-6 md:px-12 flex justify-between items-center"
+           style={{ background: 'rgba(248,250,252,0.85)' }}>
         <div className="flex items-center gap-3">
-          <div className="bg-brand-blue/15 text-brand-blue p-2 rounded-lg border border-brand-blue/20">
-            <BrainCircuit className="w-6 h-6" />
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-ocean"
+               style={{ background: 'linear-gradient(135deg, #0EA5E9, #14B8A6)' }}>
+            <BrainCircuit className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="font-bold text-lg leading-tight bg-gradient-to-r from-slate-100 to-slate-300 bg-clip-text text-transparent">
-              Deadline Guardian
-            </h1>
-            <span className="text-[9px] text-brand-blue font-bold tracking-widest uppercase block">
+            <h1 className="font-bold text-base leading-tight text-app-dark">Deadline Guardian</h1>
+            <span className="text-[9px] font-bold tracking-widest uppercase text-primary block">
               AI Productivity Companion
             </span>
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           {user ? (
             <Link to="/dashboard" className="glass-btn-primary py-2 px-5 text-sm flex items-center gap-1.5">
               Launch App <ArrowRight className="w-4 h-4" />
             </Link>
           ) : (
             <>
-              <Link to="/login" className="text-slate-400 hover:text-white font-semibold text-sm transition-colors">
+              <Link to="/login" className="text-slate-500 hover:text-app-dark font-semibold text-sm transition-colors">
                 Sign In
               </Link>
               <Link to="/register" className="glass-btn-primary py-2 px-5 text-sm">
-                Get Started
+                Get Started Free
               </Link>
             </>
           )}
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <section className="max-w-5xl mx-auto px-6 pt-20 pb-16 text-center flex flex-col items-center gap-6">
-        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-blue/10 border border-brand-blue/20 text-xs text-brand-blue font-bold tracking-wide uppercase animate-pulse">
-          <Sparkles className="w-4 h-4" /> Vibe2Ship Hackathon 2026 Submission
+      {/* ── HERO ── */}
+      <section className="max-w-5xl mx-auto px-6 pt-24 pb-16 text-center flex flex-col items-center gap-7">
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide uppercase animate-slide-up"
+             style={{ background: 'rgba(14,165,233,0.08)', border: '1px solid rgba(14,165,233,0.2)', color: '#0EA5E9' }}>
+          <Sparkles className="w-3.5 h-3.5" />
+          Vibe2Ship Hackathon 2026 · Powered by Gemini 2.5 Flash
         </div>
 
-        <h2 className="text-4xl md:text-6xl font-extrabold tracking-tight text-white leading-tight max-w-4xl mt-3">
-          Your Deadlines, Guarded by <br className="hidden md:inline" />
-          <span className="bg-gradient-to-r from-sky-500 via-cyan-500 to-teal-500 bg-clip-text text-transparent">
-            Active Agentic AI
-          </span>
+        <h2 className="text-5xl md:text-[68px] font-black tracking-tight text-app-dark leading-[1.08] max-w-4xl animate-slide-up"
+            style={{ animationDelay: '0.1s' }}>
+          Your Deadlines,{' '}
+          <br className="hidden md:inline" />
+          Guarded by{' '}
+          <span className="shimmer-text">Active Agentic AI</span>
         </h2>
 
-        <p className="text-slate-400 text-base md:text-lg max-w-2xl leading-relaxed">
-          Traditional apps only remind you of missed work. Deadline Guardian AI actively decomposes your goals, plans your day, predicts deadline risk, and helps you recover when you fall behind.
+        <p className="text-slate-500 text-lg max-w-2xl leading-relaxed animate-slide-up" style={{ animationDelay: '0.2s' }}>
+          Traditional apps only remind you of missed work. Deadline Guardian AI actively decomposes your goals,
+          plans your day, predicts deadline risk, and helps you{' '}
+          <span className="font-semibold text-app-dark">recover when you fall behind</span>.
         </p>
 
-        <div className="flex gap-4 mt-6">
+        <div className="flex flex-wrap gap-3 mt-2 justify-center animate-slide-up" style={{ animationDelay: '0.3s' }}>
           {user ? (
-            <Link to="/dashboard" className="glass-btn-primary py-3 px-8 text-base flex items-center gap-2">
+            <Link to="/dashboard" className="glass-btn-primary py-3.5 px-9 text-base flex items-center gap-2 shadow-ocean-lg">
               Go to Dashboard <ArrowRight className="w-5 h-5" />
             </Link>
           ) : (
             <>
-              <Link to="/register" className="glass-btn-primary py-3 px-8 text-base">
-                Protect Your Timeline
+              <Link to="/register" className="glass-btn-primary py-3.5 px-9 text-base shadow-ocean-lg flex items-center gap-2">
+                Protect Your Timeline <Zap className="w-5 h-5" />
               </Link>
-              <Link to="/login" className="glass-btn-secondary py-3 px-8 text-base hover:bg-slate-800/40">
-                Explore Features
+              <Link to="/login" className="glass-btn-secondary py-3.5 px-9 text-base">
+                Sign In
               </Link>
             </>
           )}
         </div>
+
+        {/* Trust badges */}
+        <div className="flex flex-wrap items-center justify-center gap-4 mt-2 text-xs text-slate-400 font-medium animate-fade-in"
+             style={{ animationDelay: '0.4s' }}>
+          {['No credit card required', 'Free to start', 'AI-powered by Gemini'].map(t => (
+            <span key={t} className="flex items-center gap-1.5">
+              <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+              {t}
+            </span>
+          ))}
+        </div>
       </section>
 
-      {/* Core Problem Statement Section */}
-      <section className="w-full max-w-6xl mx-auto px-6 py-12 border-t border-slate-900">
-        <h3 className="text-2xl font-bold text-center text-white mb-10">
-          Why Traditional Planners Fail Students & Professionals
-        </h3>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {coreProblems.map((prob, i) => (
-            <div key={i} className="glass-panel border border-slate-900 rounded-2xl p-6 relative overflow-hidden">
-              <div className={`p-3 rounded-xl border w-fit mb-4 ${prob.color}`}>
-                <prob.icon className="w-6 h-6" />
-              </div>
-              <h4 className="text-lg font-bold text-slate-100 mb-2">{prob.title}</h4>
-              <p className="text-sm text-slate-400 leading-relaxed">{prob.description}</p>
+      {/* ── STATS ROW ── */}
+      <section className="max-w-4xl mx-auto px-6 pb-16">
+        <div className="glass-card p-6 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+          {stats.map((s) => (
+            <div key={s.label}>
+              <p className="text-3xl font-black ocean-gradient-text">{s.value}</p>
+              <p className="text-xs text-slate-500 font-semibold mt-1">{s.label}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Features Grid Section */}
-      <section className="w-full max-w-6xl mx-auto px-6 py-16 border-t border-slate-900">
+      {/* ── WAVE DIVIDER ── */}
+      <div className="wave-divider -mt-4">
+        <svg viewBox="0 0 1440 60" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M0 30 C360 60 720 0 1080 30 C1260 45 1380 20 1440 30 L1440 60 L0 60 Z"
+            fill="rgba(14,165,233,0.06)"
+          />
+          <path
+            d="M0 40 C300 20 600 55 900 35 C1100 22 1300 50 1440 40 L1440 60 L0 60 Z"
+            fill="rgba(20,184,166,0.04)"
+          />
+        </svg>
+      </div>
+
+      {/* ── PROBLEM SECTION ── */}
+      <section className="w-full max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-12">
-          <h3 className="text-3xl font-extrabold text-white">The Active AI Companion</h3>
-          <p className="text-slate-400 text-sm mt-2 max-w-md mx-auto">
-            Explore the advanced agentic features designed to secure your workload timelines and keep you consistent.
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">The Problem</p>
+          <h3 className="text-3xl font-extrabold text-app-dark">Why Traditional Planners Fail</h3>
+          <p className="text-slate-500 text-sm mt-2 max-w-lg mx-auto">
+            Students and professionals miss deadlines not because of lack of effort — but because existing tools offer zero active assistance.
           </p>
         </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {features.map((feat, i) => (
-            <div key={i} className="glass-panel border border-slate-900 rounded-2xl p-6 flex flex-col gap-3 hover:border-brand-blue/30 transition-all duration-300">
-              <div className="bg-brand-blue/10 text-brand-blue p-2.5 rounded-xl border border-brand-blue/20 w-fit">
-                <feat.icon className="w-5 h-5" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {coreProblems.map((prob, i) => (
+            <div key={i} className="glass-card p-6 relative overflow-hidden group hover:shadow-card-hover transition-all duration-300">
+              <div className="absolute top-0 left-0 right-0 h-[3px] rounded-t-card"
+                   style={{ background: `linear-gradient(90deg, ${prob.accent}, transparent)` }} />
+              <div className="w-12 h-12 rounded-2xl flex items-center justify-center mb-4"
+                   style={{ background: prob.bg, border: `1px solid ${prob.border}` }}>
+                <prob.icon className="w-6 h-6" style={{ color: prob.accent }} />
               </div>
-              <h4 className="text-base font-bold text-slate-200">{feat.title}</h4>
-              <p className="text-xs text-slate-400 leading-relaxed">{feat.description}</p>
+              <h4 className="text-base font-bold text-app-dark mb-2">{prob.title}</h4>
+              <p className="text-sm text-slate-500 leading-relaxed">{prob.description}</p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* Call to Action Footer */}
-      <section className="w-full bg-slate-950 border-t border-slate-900 py-12 px-6 text-center flex flex-col items-center gap-4">
-        <h4 className="text-xl font-bold text-white">Ready to stop missing deadlines?</h4>
-        <p className="text-slate-400 text-xs max-w-md">
-          Start planning with active breakdowns, calendar integration, habit trackers, and voice commands immediately.
+      {/* ── FEATURES GRID ── */}
+      <section className="w-full max-w-6xl mx-auto px-6 py-16 border-t border-slate-100">
+        <div className="text-center mb-12">
+          <p className="text-xs font-bold uppercase tracking-widest text-primary mb-2">What We Do</p>
+          <h3 className="text-3xl font-extrabold text-app-dark">The Active AI Companion</h3>
+          <p className="text-slate-500 text-sm mt-2 max-w-md mx-auto">
+            Explore the agentic features designed to secure your workload timelines and keep you consistent.
+          </p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {features.map((feat, i) => (
+            <div key={i} className="glass-card p-6 flex flex-col gap-3 group hover:shadow-card-hover transition-all duration-300 hover:-translate-y-0.5">
+              <div className="w-11 h-11 rounded-2xl flex items-center justify-center"
+                   style={{ background: `${feat.accent}14`, border: `1px solid ${feat.accent}30` }}>
+                <feat.icon className="w-5 h-5" style={{ color: feat.accent }} />
+              </div>
+              <h4 className="text-base font-bold text-app-dark">{feat.title}</h4>
+              <p className="text-sm text-slate-500 leading-relaxed flex-1">{feat.description}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA FOOTER ── */}
+      <section className="w-full border-t border-slate-100 py-20 px-6 text-center flex flex-col items-center gap-5 relative overflow-hidden"
+               style={{ background: 'linear-gradient(135deg, rgba(14,165,233,0.04), rgba(20,184,166,0.04))' }}>
+        <div className="absolute inset-0 -z-10 pointer-events-none"
+             style={{ background: 'radial-gradient(ellipse at center, rgba(14,165,233,0.06), transparent 70%)' }} />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold tracking-wide"
+             style={{ background: 'rgba(14,165,233,0.1)', border: '1px solid rgba(14,165,233,0.2)', color: '#0EA5E9' }}>
+          <Zap className="w-3.5 h-3.5" /> Get started in under 60 seconds
+        </div>
+        <h4 className="text-3xl font-extrabold text-app-dark max-w-lg leading-tight">
+          Ready to stop missing deadlines?
+        </h4>
+        <p className="text-slate-500 text-sm max-w-md leading-relaxed">
+          Start planning with active breakdowns, calendar integration, habit trackers, and voice commands — completely free.
         </p>
-        <Link to="/register" className="glass-btn-primary py-2.5 px-6 text-sm mt-2">
-          Create Free Sandbox Account
-        </Link>
-        <span className="text-[10px] text-slate-500 mt-6">© 2026 Deadline Guardian AI. All rights reserved.</span>
+        <div className="flex flex-wrap gap-3 justify-center mt-2">
+          <Link to="/register" className="glass-btn-primary py-3 px-8 text-base shadow-ocean-lg flex items-center gap-2">
+            Create Free Account <ArrowRight className="w-5 h-5" />
+          </Link>
+          <Link to="/login" className="glass-btn-secondary py-3 px-8 text-base">
+            Sign In
+          </Link>
+        </div>
+        <span className="text-[11px] text-slate-400 mt-6">© 2026 Deadline Guardian AI. All rights reserved.</span>
       </section>
     </div>
   );

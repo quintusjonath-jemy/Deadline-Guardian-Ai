@@ -189,19 +189,19 @@ export default function Tasks() {
   };
 
   const getPriorityBadge = (priority) => {
-    if (priority === 'high') return 'bg-brand-red/10 text-brand-red border border-brand-red/20';
-    if (priority === 'medium') return 'bg-brand-yellow/10 text-brand-yellow border border-brand-yellow/20';
-    return 'bg-brand-green/10 text-brand-green border border-brand-green/20';
+    if (priority === 'high') return 'bg-danger/10 text-danger border border-brand-red/20';
+    if (priority === 'medium') return 'bg-brand-yellow/10 text-warning border border-brand-yellow/20';
+    return 'bg-success/10 text-success border border-brand-green/20';
   };
 
   return (
-    <div className="pl-68 pr-8 py-8 min-h-screen grid grid-cols-1 xl:grid-cols-3 gap-8">
+    <div className="pl-68 pr-8 py-8 min-h-screen bg-app-bg grid grid-cols-1 xl:grid-cols-3 gap-8">
       
       {/* Task Creation Form (Left/Top) */}
       <section className="xl:col-span-1">
-        <div className="glass-panel rounded-2xl border border-slate-800 p-6 sticky top-8">
+        <div className="glass-card p-6 sticky top-8">
           <h3 className="font-extrabold text-lg text-white mb-6 flex items-center gap-2.5">
-            <Plus className="w-5 h-5 text-brand-blue" />
+            <Plus className="w-5 h-5 text-primary" />
             <span>Create AI Managed Task</span>
           </h3>
 
@@ -280,19 +280,19 @@ export default function Tasks() {
       <section className="xl:col-span-2 space-y-4">
         <header className="flex justify-between items-center mb-4">
           <div>
-            <h2 className="text-2xl font-extrabold text-white">Your Workspace roadmaps</h2>
+            <h2 className="text-2xl font-extrabold text-app-dark">Your Workspace roadmaps</h2>
             <p className="text-xs text-slate-400">Expand tasks to check off AI-generated milestones.</p>
           </div>
-          <div className="bg-slate-900 border border-slate-800 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg text-slate-400 flex items-center gap-2">
-            <ListTodo className="w-4 h-4 text-brand-blue" />
+          <div className="bg-slate-900 border border-slate-200 text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-lg text-slate-400 flex items-center gap-2">
+            <ListTodo className="w-4 h-4 text-primary" />
             <span>{tasks.length} Total tasks</span>
           </div>
         </header>
 
         {tasks.length === 0 ? (
-          <div className="py-24 text-center border-2 border-dashed border-slate-800 rounded-2xl bg-slate-900/10">
+          <div className="py-24 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-900/10">
             <AlertCircle className="w-10 h-10 text-slate-600 mx-auto mb-3" />
-            <h4 className="text-sm font-semibold text-slate-300">No active tasks</h4>
+            <h4 className="text-sm font-semibold text-slate-600">No active tasks</h4>
             <p className="text-xs text-slate-500 max-w-xs mx-auto mt-1">Use the form on the left or click the floating microphone in the bottom-right corner to speak to your assistant.</p>
           </div>
         ) : (
@@ -313,8 +313,8 @@ export default function Tasks() {
                     task.status === 'completed' 
                       ? 'border-brand-green/20 opacity-75' 
                       : isExpanded 
-                        ? 'border-brand-blue/30 shadow-lg' 
-                        : 'border-slate-800/80 hover:border-slate-700'
+                        ? 'border-primary/30 shadow-lg' 
+                        : 'border-slate-200/80 hover:border-slate-200'
                   }`}
                 >
                   {/* Card Header Summary */}
@@ -334,7 +334,7 @@ export default function Tasks() {
                       
                       <div className="flex items-center gap-4 text-xs text-slate-400 mt-2">
                         <span className="flex items-center gap-1">
-                          <Clock className="w-3.5 h-3.5 text-brand-blue shrink-0" />
+                          <Clock className="w-3.5 h-3.5 text-primary shrink-0" />
                           <span>{new Date(task.deadline).toLocaleString([], {month: 'short', day: 'numeric', hour: '2-digit', minute:'2-digit'})}</span>
                         </span>
                         <span className="hidden sm:inline">•</span>
@@ -342,7 +342,7 @@ export default function Tasks() {
                         {totalSub > 0 && (
                           <>
                             <span>•</span>
-                            <span className="text-brand-green font-semibold">{progressPercent}% complete</span>
+                            <span className="text-success font-semibold">{progressPercent}% complete</span>
                           </>
                         )}
                       </div>
@@ -355,7 +355,7 @@ export default function Tasks() {
 
                   {/* Expanded Detail Panel */}
                   {isExpanded && (
-                    <div className="bg-slate-950/40 border-t border-slate-800/70 p-4 space-y-4">
+                    <div className="bg-slate-950/40 border-t border-slate-200/70 p-4 space-y-4">
                       {task.description && (
                         <div>
                           <p className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Description</p>
@@ -366,15 +366,15 @@ export default function Tasks() {
                       {/* Subtask Roadmap section */}
                       <div>
                         <div className="flex justify-between items-center mb-2">
-                          <p className="text-[9px] text-brand-blue font-bold uppercase tracking-wider flex items-center gap-1.5">
-                            <Sparkles className="w-3.5 h-3.5 text-brand-blue" />
+                          <p className="text-[9px] text-primary font-bold uppercase tracking-wider flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-primary" />
                             <span>AI-Generated Breakdown Roadmap</span>
                           </p>
                           <span className="text-[10px] text-slate-400">{completedSub}/{totalSub} Completed</span>
                         </div>
 
                         {isDecomposing ? (
-                          <div className="flex items-center gap-2.5 py-4 justify-center text-xs text-brand-blue">
+                          <div className="flex items-center gap-2.5 py-4 justify-center text-xs text-primary">
                             <RefreshCw className="w-4 h-4 animate-spin" />
                             <span>AI is designing your subtask breakdown...</span>
                           </div>
@@ -387,15 +387,15 @@ export default function Tasks() {
                                 key={st.id} 
                                 className={`flex items-start gap-3 p-2.5 rounded-lg border transition-all duration-150 cursor-pointer select-none text-xs ${
                                   st.status === 'completed' 
-                                    ? 'bg-slate-900/10 border-slate-800/20 text-slate-500' 
-                                    : 'bg-slate-900/40 border-slate-800 hover:border-slate-700 text-slate-300'
+                                    ? 'bg-slate-900/10 border-slate-200/20 text-slate-500' 
+                                    : 'bg-white/80 border-slate-200 hover:border-slate-200 text-slate-300'
                                 }`}
                               >
                                 <input
                                   type="checkbox"
                                   checked={st.status === 'completed'}
                                   onChange={() => handleToggleSubtask(task.id, st.id)}
-                                  className="mt-0.5 rounded border-slate-700 bg-slate-800 text-brand-blue focus:ring-brand-blue focus:ring-offset-slate-900"
+                                  className="mt-0.5 rounded border-slate-200 bg-slate-800 text-primary focus:ring-brand-blue focus:ring-offset-slate-900"
                                 />
                                 <div className="flex-1 flex justify-between gap-4">
                                   <span className={st.status === 'completed' ? 'line-through' : ''}>{st.title}</span>
@@ -408,10 +408,10 @@ export default function Tasks() {
                       </div>
 
                       {/* Card Action footer */}
-                      <div className="flex justify-between pt-2 border-t border-slate-800/40">
+                      <div className="flex justify-between pt-2 border-t border-slate-200/40">
                         <button
                           onClick={() => handleDeleteTask(task.id)}
-                          className="text-xs text-brand-red font-bold flex items-center gap-1 px-2.5 py-1.5 rounded hover:bg-brand-red/10 transition-colors"
+                          className="text-xs text-danger font-bold flex items-center gap-1 px-2.5 py-1.5 rounded hover:bg-danger/10 transition-colors"
                         >
                           <Trash2 className="w-3.5 h-3.5" /> Delete Task
                         </button>
