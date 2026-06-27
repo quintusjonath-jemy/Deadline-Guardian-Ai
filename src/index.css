@@ -33,125 +33,135 @@
   }
 }
 
-/* ============================================================
-   GLASSMORPHISM CARDS — Light mode (white glass)
-   ============================================================ */
-.glass-card {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(14, 165, 233, 0.1);
-  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.07);
-  @apply rounded-card;
-}
+@layer components {
+  /* ============================================================
+     GLASSMORPHISM CARDS — Light mode (white glass)
+     ============================================================ */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(14, 165, 233, 0.1);
+    box-shadow: 0 2px 16px rgba(15, 23, 42, 0.07);
+    @apply rounded-card;
+  }
 
-.glass-card:hover {
-  border-color: rgba(14, 165, 233, 0.2);
-  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
-}
+  .glass-card:hover {
+    border-color: rgba(14, 165, 233, 0.2);
+    box-shadow: 0 8px 32px rgba(15, 23, 42, 0.12);
+  }
 
-/* Legacy alias for existing components */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(14, 165, 233, 0.12);
-  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06);
-  @apply rounded-card;
-}
+  /* Legacy alias for existing components */
+  .glass-panel {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(14, 165, 233, 0.12);
+    box-shadow: 0 2px 16px rgba(15, 23, 42, 0.06);
+    @apply rounded-card;
+  }
 
-/* Dark glass — used on sidebar / dark surfaces */
-.glass-dark {
-  background: rgba(15, 23, 42, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(14, 165, 233, 0.12);
-}
+  /* Dark glass — used on sidebar / dark surfaces */
+  .glass-dark {
+    background: rgba(15, 23, 42, 0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(14, 165, 233, 0.12);
+  }
 
-/* ============================================================
-   STAT CARDS — Gradient-accented top border
-   ============================================================ */
-.stat-card {
-  @apply glass-card p-5 relative overflow-hidden;
-}
+  /* ============================================================
+     STAT CARDS — Gradient-accented top border
+     ============================================================ */
+  .stat-card {
+    @apply glass-card p-5 relative overflow-hidden;
+  }
 
-.stat-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, #0EA5E9, #06B6D4, #14B8A6);
-  border-radius: 16px 16px 0 0;
-}
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #0EA5E9, #06B6D4, #14B8A6);
+    border-radius: 16px 16px 0 0;
+  }
 
-/* Risk strip — left colored border on task cards */
-.risk-strip-high  { border-left: 3px solid #EF4444; }
-.risk-strip-medium { border-left: 3px solid #F59E0B; }
-.risk-strip-low   { border-left: 3px solid #10B981; }
+  /* Risk strip — left colored border on task cards */
+  .risk-strip-high  { border-left: 3px solid #EF4444; }
+  .risk-strip-medium { border-left: 3px solid #F59E0B; }
+  .risk-strip-low   { border-left: 3px solid #10B981; }
 
-/* ============================================================
-   OCEAN GRADIENT UTILITIES
-   ============================================================ */
-.ocean-gradient {
-  background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 50%, #14B8A6 100%);
-}
+  /* ============================================================
+     OCEAN GRADIENT UTILITIES
+     ============================================================ */
+  .ocean-gradient {
+    background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 50%, #14B8A6 100%);
+  }
 
-.ocean-gradient-text {
-  background: linear-gradient(135deg, #0EA5E9, #06B6D4, #14B8A6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+  .ocean-gradient-text {
+    background: linear-gradient(135deg, #0EA5E9, #06B6D4, #14B8A6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 
-.ocean-gradient-soft {
-  background: linear-gradient(135deg, rgba(14,165,233,0.08) 0%, rgba(20,184,166,0.08) 100%);
-}
+  .ocean-gradient-soft {
+    background: linear-gradient(135deg, rgba(14,165,233,0.08) 0%, rgba(20,184,166,0.08) 100%);
+  }
 
-/* ============================================================
-   BUTTONS
-   ============================================================ */
-.glass-btn-primary {
-  background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 60%, #14B8A6 100%);
-  @apply text-white font-semibold rounded-xl px-5 py-2.5 
-         hover:shadow-lg hover:shadow-sky-500/30 
-         active:scale-95 transition-all duration-200;
-}
+  /* ============================================================
+     BUTTONS
+     ============================================================ */
+  .glass-btn-primary {
+    background: linear-gradient(135deg, #0EA5E9 0%, #06B6D4 60%, #14B8A6 100%);
+    @apply text-white font-semibold rounded-xl px-5 py-2.5 
+           hover:shadow-lg hover:shadow-sky-500/30 
+           active:scale-95 transition-all duration-200;
+  }
 
-.glass-btn-secondary {
-  background: rgba(14, 165, 233, 0.06);
-  border: 1px solid rgba(14, 165, 233, 0.2);
-  @apply text-primary font-semibold rounded-xl px-5 py-2.5 
-         hover:bg-sky-50 hover:border-sky-300
-         active:scale-95 transition-all duration-200;
-}
+  .glass-btn-secondary {
+    background: rgba(14, 165, 233, 0.06);
+    border: 1px solid rgba(14, 165, 233, 0.2);
+    @apply text-primary font-semibold rounded-xl px-5 py-2.5 
+           hover:bg-sky-50 hover:border-sky-300
+           active:scale-95 transition-all duration-200;
+  }
 
-.glass-btn-ghost {
-  @apply text-slate-500 font-semibold rounded-xl px-4 py-2 
-         hover:bg-slate-100 hover:text-app-dark
-         active:scale-95 transition-all duration-200;
-}
+  .glass-btn-ghost {
+    @apply text-slate-500 font-semibold rounded-xl px-4 py-2 
+           hover:bg-slate-100 hover:text-app-dark
+           active:scale-95 transition-all duration-200;
+  }
 
-/* ============================================================
-   FORM INPUTS
-   ============================================================ */
-.glass-input {
-  background: rgba(248, 250, 252, 0.95);
-  border: 1.5px solid rgba(14, 165, 233, 0.15);
-  @apply text-app-dark rounded-xl px-4 py-3 w-full
-         focus:outline-none focus:border-primary focus:ring-2 focus:ring-sky-500/20
-         transition-all duration-200 placeholder:text-slate-400;
-  line-height: 1.5;
-  height: 46px;
-  display: flex;
-  align-items: center;
-}
+  /* ============================================================
+     FORM INPUTS
+     ============================================================ */
+  .glass-input {
+    background: rgba(248, 250, 252, 0.95);
+    border: 1.5px solid rgba(14, 165, 233, 0.15);
+    @apply text-app-dark rounded-xl px-4 w-full
+           focus:outline-none focus:border-primary focus:ring-2 focus:ring-sky-500/20
+           transition-all duration-200 placeholder:text-slate-400;
+    /* Clean height and padding, no flex box layout on input elements */
+    height: 46px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: normal;
+  }
 
-.glass-input:focus {
-  background: #fff;
-  box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
-}
+  /* Textareas should auto-adjust height */
+  textarea.glass-input {
+    height: auto;
+    min-height: 100px;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  .glass-input:focus {
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+  }
 
 /* ============================================================
    SIDEBAR — Deep Navy per spec
@@ -335,3 +345,5 @@
 .section-label {
   @apply text-xs font-bold text-slate-400 uppercase tracking-widest;
 }
+}
+
