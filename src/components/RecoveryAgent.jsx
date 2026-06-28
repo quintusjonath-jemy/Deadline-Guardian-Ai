@@ -107,7 +107,7 @@ export default function RecoveryAgent() {
   if (!isOpen || missedTasks.length === 0) return null;
 
   return (
-    <div className="fixed bottom-6 left-6 max-w-sm glass-panel border border-brand-red/30 rounded-xl shadow-2xl z-40 p-4 animate-fade-in">
+    <div className="fixed bottom-6 left-72 max-w-sm glass-card border border-rose-100 rounded-xl shadow-2xl z-40 p-4 animate-fade-in">
       <div className="flex justify-between items-start mb-3">
         <div className="flex items-center gap-2 text-danger font-bold text-sm">
           <ShieldAlert className="w-5 h-5 text-danger animate-pulse" />
@@ -115,32 +115,32 @@ export default function RecoveryAgent() {
         </div>
         <button 
           onClick={() => setIsOpen(false)}
-          className="text-slate-500 hover:text-slate-700"
+          className="text-slate-400 hover:text-slate-600"
         >
           <X className="w-4 h-4" />
         </button>
       </div>
 
       <div className="space-y-3">
-        <p className="text-xs text-slate-300">
-          I detected that deadlines for <span className="font-semibold text-slate-100">{missedTasks.length} task(s)</span> have passed without completion:
+        <p className="text-xs text-slate-600">
+          I detected that deadlines for <span className="font-semibold text-slate-800">{missedTasks.length} task(s)</span> have passed without completion:
         </p>
         
-        <ul className="text-xs text-slate-400 list-disc list-inside max-h-20 overflow-y-auto bg-slate-950/40 p-2 rounded border border-slate-200">
+        <ul className="text-xs text-slate-700 list-disc list-inside max-h-20 overflow-y-auto bg-slate-50 p-2 rounded border border-slate-200">
           {missedTasks.map(t => (
             <li key={t.id} className="truncate">{t.title}</li>
           ))}
         </ul>
 
         {isLoading ? (
-          <div className="flex items-center gap-2 justify-center py-2 text-xs text-slate-400">
+          <div className="flex items-center gap-2 justify-center py-2 text-xs text-slate-500">
             <RefreshCw className="w-4 h-4 animate-spin text-primary" />
             <span>Formulating recovery proposal...</span>
           </div>
         ) : (
           recoveryProposal && (
             <div className="bg-primary/5 border border-primary/20 rounded p-2.5 space-y-2">
-              <p className="text-xs italic text-slate-300">
+              <p className="text-xs italic text-slate-600">
                 "{recoveryProposal.message}"
               </p>
               <p className="text-[10px] text-primary font-bold uppercase tracking-wider">
@@ -153,14 +153,14 @@ export default function RecoveryAgent() {
         <div className="flex gap-2 justify-end pt-1">
           <button
             onClick={() => setIsOpen(false)}
-            className="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-semibold"
+            className="px-3 py-1.5 rounded border border-slate-200 hover:bg-slate-50 text-xs text-slate-500 font-semibold transition-all"
           >
             Ignore
           </button>
           <button
             disabled={isLoading}
             onClick={handleApplyReschedule}
-            className="px-3 py-1.5 rounded bg-gradient-to-r from-brand-red to-rose-600 hover:shadow-lg hover:shadow-red-500/20 text-xs text-white font-semibold flex items-center gap-1.5 disabled:opacity-40"
+            className="px-3 py-1.5 rounded bg-gradient-to-r from-brand-red to-rose-600 hover:shadow-lg hover:shadow-red-500/20 text-xs text-white font-semibold flex items-center gap-1.5 disabled:opacity-40 transition-all"
           >
             <CalendarCheck2 className="w-3.5 h-3.5" />
             Accept & Reschedule

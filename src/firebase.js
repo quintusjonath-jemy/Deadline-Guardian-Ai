@@ -195,7 +195,45 @@ const localDb = {
 // EXPORTS WRAPPER
 // ==========================================
 
-export const authInstance = isLocalFallback ? localAuth : auth;
+const isGuestUser = () => {
+  try {
+    const guestUser = localStorage.getItem('dg_user');
+    if (guestUser) {
+      const parsed = JSON.parse(guestUser);
+      return parsed && parsed.uid === 'usr_guest';
+    }
+  } catch {
+    // ignore
+  }
+  return false;
+};
+
+const actualAuth = isLocalFallback ? localAuth : auth;
+
+export const authInstance = {
+  get currentUser() {
+    try {
+      const guestUser = localStorage.getItem('dg_user');
+      if (guestUser) {
+        const parsed = JSON.parse(guestUser);
+        if (parsed && parsed.uid === 'usr_guest') {
+          return parsed;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return actualAuth.currentUser;
+  },
+  onAuthStateChanged(callback) {
+    return actualAuth.onAuthStateChanged(callback);
+  },
+  signOut() {
+    localStorage.removeItem('dg_user');
+    return actualAuth.signOut();
+  }
+};
+
 export const dbInstance = isLocalFallback ? localDb : db;
 export { isLocalFallback };
 
@@ -211,6 +249,7 @@ export const registerUser = (email, password) => {
 };
 
 export const logoutUser = () => {
+  localStorage.removeItem('dg_user');
   if (isLocalFallback) return localAuth.signOut();
   return signOut(auth);
 };
@@ -222,13 +261,25 @@ export const loginWithGoogle = () => {
 };
 
 export const subscribeToAuth = (callback) => {
+  try {
+    const guestUser = localStorage.getItem('dg_user');
+    if (guestUser) {
+      const parsed = JSON.parse(guestUser);
+      if (parsed && parsed.uid === 'usr_guest') {
+        callback(parsed);
+        return () => {};
+      }
+    }
+  } catch {
+    // ignore
+  }
   if (isLocalFallback) return localAuth.onAuthStateChanged(callback);
   return onAuthStateChanged(auth, callback);
 };
 
 // Firestore helper abstracts
 export const getDocument = async (col, docId) => {
-  if (isLocalFallback) return localDb.getDoc(col, docId);
+  if (isLocalFallback || isGuestUser()) return localDb.getDoc(col, docId);
   try {
     const snap = await getDoc(doc(db, col, docId));
     return snap;
@@ -239,7 +290,7 @@ export const getDocument = async (col, docId) => {
 };
 
 export const setDocument = async (col, docId, data) => {
-  if (isLocalFallback) return localDb.setDoc(col, docId, data);
+  if (isLocalFallback || isGuestUser()) return localDb.setDoc(col, docId, data);
   try {
     return await setDoc(doc(db, col, docId), data, { merge: true });
   } catch (error) {
@@ -249,7 +300,7 @@ export const setDocument = async (col, docId, data) => {
 };
 
 export const createDocument = async (col, data) => {
-  if (isLocalFallback) return localDb.addDoc(col, data);
+  if (isLocalFallback || isGuestUser()) return localDb.addDoc(col, data);
   try {
     return await addDoc(collection(db, col), data);
   } catch (error) {
@@ -259,7 +310,7 @@ export const createDocument = async (col, data) => {
 };
 
 export const updateDocument = async (col, docId, data) => {
-  if (isLocalFallback) return localDb.updateDoc(col, docId, data);
+  if (isLocalFallback || isGuestUser()) return localDb.updateDoc(col, docId, data);
   try {
     return await updateDoc(doc(db, col, docId), data);
   } catch (error) {
@@ -269,7 +320,7 @@ export const updateDocument = async (col, docId, data) => {
 };
 
 export const deleteDocument = async (col, docId) => {
-  if (isLocalFallback) return localDb.deleteDoc(col, docId);
+  if (isLocalFallback || isGuestUser()) return localDb.deleteDoc(col, docId);
   try {
     return await deleteDoc(doc(db, col, docId));
   } catch (error) {
@@ -279,7 +330,7 @@ export const deleteDocument = async (col, docId) => {
 };
 
 export const queryDocuments = async (col, ...conditions) => {
-  if (isLocalFallback) {
+  if (isLocalFallback || isGuestUser()) {
     const localConditions = conditions.map(c => c);
     return localDb.getDocs(col, localConditions);
   }
@@ -294,7 +345,7 @@ export const queryDocuments = async (col, ...conditions) => {
 };
 
 export const streamDocuments = (col, conditions, callback) => {
-  if (isLocalFallback) {
+  if (isLocalFallback || isGuestUser()) {
     return localDb.onSnapshot(col, conditions, callback);
   }
 
