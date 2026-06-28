@@ -20,7 +20,7 @@ import Goals from './pages/Goals';
 import Analytics from './pages/Analytics';
 import SettingsPage from './pages/Settings';
 
-function AppContent({ user }) {
+function AppContent() {
   const location = useLocation();
   const isLanding = location.pathname === '/';
 

@@ -110,7 +110,7 @@ export default function Coach() {
       {/* Chat workspace */}
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-4 gap-6 min-h-0 mb-4">
         {/* Chat Thread Panel */}
-        <section className="lg:col-span-3 glass-card/80 p-4 flex flex-col justify-between min-h-0">
+        <section className="lg:col-span-3 glass-card p-4 flex flex-col justify-between min-h-0">
           {/* Messages list */}
           <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-4 scrollbar-thin">
             {messages.map((msg) => (
@@ -122,7 +122,7 @@ export default function Coach() {
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 border ${
                   msg.sender === 'user' 
                     ? 'bg-primary/10 border-primary/20 text-primary' 
-                    : 'bg-teal-500/10 border-teal-500/20 text-teal-400'
+                    : 'bg-teal-500/10 border-teal-500/20 text-teal-600'
                 }`}>
                   {msg.sender === 'user' ? <User className="w-4 h-4" /> : <BrainCircuit className="w-4 h-4" />}
                 </div>
@@ -130,8 +130,8 @@ export default function Coach() {
                 {/* Bubble content */}
                 <div className={`p-4 rounded-2xl text-sm leading-relaxed border ${
                   msg.sender === 'user'
-                    ? 'bg-[#0f172a]/60 text-slate-200 rounded-tr-none border-slate-200'
-                    : 'bg-white/80 text-slate-100 rounded-tl-none border-slate-200/60'
+                    ? 'bg-primary text-white rounded-tr-none border-transparent'
+                    : 'bg-white text-slate-800 rounded-tl-none border-slate-200/60 shadow-sm'
                 }`}>
                   {msg.content}
                 </div>
@@ -140,10 +140,10 @@ export default function Coach() {
 
             {loading && (
               <div className="flex gap-3 mr-auto max-w-[80%] items-center">
-                <div className="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-400 flex items-center justify-center shrink-0">
+                <div className="w-8 h-8 rounded-lg bg-teal-500/10 border border-teal-500/20 text-teal-600 flex items-center justify-center shrink-0">
                   <RefreshCw className="w-4 h-4 animate-spin" />
                 </div>
-                <div className="bg-white/80 text-slate-400 rounded-2xl rounded-tl-none border border-slate-200/60 p-4 text-xs font-semibold animate-pulse">
+                <div className="bg-white text-slate-500 rounded-2xl rounded-tl-none border border-slate-200/60 p-4 text-xs font-semibold animate-pulse shadow-sm">
                   Analyzing timeline constraints & coaching...
                 </div>
               </div>
@@ -154,11 +154,11 @@ export default function Coach() {
           {/* Prompt input field */}
           <form 
             onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
-            className="flex gap-3 bg-[#070b13]/80 border border-slate-200/80 p-2 rounded-xl focus-within:border-primary/40 transition-colors"
+            className="flex gap-3 bg-white/90 border border-slate-200 p-2 rounded-xl focus-within:border-primary/40 focus-within:ring-2 focus-within:ring-sky-500/15 transition-all shadow-sm"
           >
             <input
               type="text"
-              className="flex-1 bg-transparent border-none text-slate-100 text-sm focus:outline-none px-2 py-2 placeholder:text-slate-600"
+              className="flex-1 bg-transparent border-none text-slate-800 text-sm focus:outline-none px-2 py-2 placeholder:text-slate-400"
               placeholder="Ask for prioritization advice, Pomodoro schedules, or recovery tactics..."
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
@@ -167,7 +167,7 @@ export default function Coach() {
             <button
               type="submit"
               disabled={loading || !inputValue.trim()}
-              className="bg-primary/20 hover:bg-primary/30 text-primary p-2.5 rounded-lg border border-primary/30 disabled:opacity-40 transition-all"
+              className="bg-primary hover:bg-sky-600 text-white p-2.5 rounded-lg disabled:opacity-40 transition-all flex items-center justify-center"
             >
               <Send className="w-4 h-4" />
             </button>
@@ -177,7 +177,7 @@ export default function Coach() {
         {/* Suggestion & Context Panel */}
         <aside className="space-y-6 flex flex-col min-h-0">
           {/* Quick Questions Card */}
-          <div className="glass-card/80 rounded-2xl p-5 shrink-0">
+          <div className="glass-card rounded-2xl p-5 shrink-0">
             <h3 className="text-sm font-extrabold text-app-dark flex items-center gap-2 mb-3.5">
               <HelpCircle className="w-4.5 h-4.5 text-primary" />
               <span>Suggested Queries</span>
@@ -188,7 +188,7 @@ export default function Coach() {
                   key={idx}
                   onClick={() => handleSendMessage(q)}
                   disabled={loading}
-                  className="w-full text-left p-3 rounded-xl bg-white/80 border border-slate-200/50 hover:border-primary/20 hover:bg-[#070b13]/40 text-xs text-slate-400 hover:text-white transition-all text-ellipsis overflow-hidden"
+                  className="w-full text-left p-3 rounded-xl bg-white border border-slate-200/80 hover:border-primary/30 hover:bg-sky-50/50 text-xs text-slate-500 hover:text-primary transition-all text-ellipsis overflow-hidden shadow-sm"
                 >
                   {q}
                 </button>
@@ -197,10 +197,10 @@ export default function Coach() {
           </div>
 
           {/* Active Tasks Context View */}
-          <div className="glass-card/80 rounded-2xl p-5 flex-1 overflow-y-auto min-h-0 flex flex-col justify-between">
+          <div className="glass-card rounded-2xl p-5 flex-1 overflow-y-auto min-h-0 flex flex-col justify-between">
             <div>
               <h3 className="text-sm font-extrabold text-app-dark flex items-center gap-2 mb-3">
-                <BrainCircuit className="w-4.5 h-4.5 text-teal-400" />
+                <BrainCircuit className="w-4.5 h-4.5 text-teal-600" />
                 <span>Coach Task Context</span>
               </h3>
               <p className="text-[10px] text-slate-500 leading-normal mb-4">
@@ -208,7 +208,7 @@ export default function Coach() {
               </p>
 
               {tasks.length === 0 ? (
-                <div className="text-center py-6 text-xs text-slate-500 border border-dashed border-slate-200 rounded-xl bg-slate-900/10">
+                <div className="text-center py-6 text-xs text-slate-500 border border-dashed border-slate-200 rounded-xl bg-slate-50">
                   No active tasks. Seed sample data to test context!
                 </div>
               ) : (
@@ -216,9 +216,9 @@ export default function Coach() {
                   {tasks.slice(0, 4).map(t => (
                     <div 
                       key={t.id}
-                      className="p-2.5 rounded-lg bg-slate-50 border border-slate-200/40 text-left"
+                      className="p-2.5 rounded-lg bg-slate-50 border border-slate-200 text-left"
                     >
-                      <p className="text-xs font-bold text-slate-200 truncate">{t.title}</p>
+                      <p className="text-xs font-bold text-slate-700 truncate">{t.title}</p>
                       <span className="text-[9px] text-slate-500 font-semibold mt-0.5 block">
                         Hours: {t.estimatedHours || 2}h | Priority: {t.priority}
                       </span>
@@ -235,7 +235,7 @@ export default function Coach() {
 
             <button
               onClick={() => navigate('/tasks')}
-              className="w-full mt-4 text-[10px] bg-slate-900 hover:bg-slate-800 border border-slate-200 hover:border-slate-200 text-slate-300 font-bold tracking-wider uppercase py-2.5 rounded-lg flex items-center justify-center gap-1 transition-all"
+              className="w-full mt-4 glass-btn-secondary text-[10px] tracking-wider uppercase py-2.5 rounded-lg flex items-center justify-center gap-1 transition-all"
             >
               Go to Tasks <ArrowRight className="w-3 h-3" />
             </button>

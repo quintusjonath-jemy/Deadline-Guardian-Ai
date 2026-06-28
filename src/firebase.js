@@ -229,53 +229,99 @@ export const subscribeToAuth = (callback) => {
 // Firestore helper abstracts
 export const getDocument = async (col, docId) => {
   if (isLocalFallback) return localDb.getDoc(col, docId);
-  const snap = await getDoc(doc(db, col, docId));
-  return snap;
+  try {
+    const snap = await getDoc(doc(db, col, docId));
+    return snap;
+  } catch (error) {
+    console.warn(`Firestore getDocument failed for ${col}/${docId}. Falling back to LocalStorage:`, error);
+    return localDb.getDoc(col, docId);
+  }
 };
 
 export const setDocument = async (col, docId, data) => {
   if (isLocalFallback) return localDb.setDoc(col, docId, data);
-  return setDoc(doc(db, col, docId), data, { merge: true });
+  try {
+    return await setDoc(doc(db, col, docId), data, { merge: true });
+  } catch (error) {
+    console.warn(`Firestore setDocument failed for ${col}/${docId}. Falling back to LocalStorage:`, error);
+    return localDb.setDoc(col, docId, data);
+  }
 };
 
 export const createDocument = async (col, data) => {
   if (isLocalFallback) return localDb.addDoc(col, data);
-  return addDoc(collection(db, col), data);
+  try {
+    return await addDoc(collection(db, col), data);
+  } catch (error) {
+    console.warn(`Firestore createDocument failed for ${col}. Falling back to LocalStorage:`, error);
+    return localDb.addDoc(col, data);
+  }
 };
 
 export const updateDocument = async (col, docId, data) => {
   if (isLocalFallback) return localDb.updateDoc(col, docId, data);
-  return updateDoc(doc(db, col, docId), data);
+  try {
+    return await updateDoc(doc(db, col, docId), data);
+  } catch (error) {
+    console.warn(`Firestore updateDocument failed for ${col}/${docId}. Falling back to LocalStorage:`, error);
+    return localDb.updateDoc(col, docId, data);
+  }
 };
 
 export const deleteDocument = async (col, docId) => {
   if (isLocalFallback) return localDb.deleteDoc(col, docId);
-  return deleteDoc(doc(db, col, docId));
+  try {
+    return await deleteDoc(doc(db, col, docId));
+  } catch (error) {
+    console.warn(`Firestore deleteDocument failed for ${col}/${docId}. Falling back to LocalStorage:`, error);
+    return localDb.deleteDoc(col, docId);
+  }
 };
 
 export const queryDocuments = async (col, ...conditions) => {
   if (isLocalFallback) {
-    // Map Firestore conditions into simple format
-    const localConditions = conditions.map(c => {
-      // Very basic translation for where clauses
-      if (c && c._query) {
-        // Fallback or skip if complicated
-      }
-      return c;
-    });
+    const localConditions = conditions.map(c => c);
     return localDb.getDocs(col, localConditions);
   }
-  
-  const q = query(collection(db, col), ...conditions);
-  return getDocs(q);
+  try {
+    const q = query(collection(db, col), ...conditions);
+    return await getDocs(q);
+  } catch (error) {
+    console.warn(`Firestore queryDocuments failed for ${col}. Falling back to LocalStorage:`, error);
+    const localConditions = conditions.map(c => c);
+    return localDb.getDocs(col, localConditions);
+  }
 };
 
 export const streamDocuments = (col, conditions, callback) => {
   if (isLocalFallback) {
     return localDb.onSnapshot(col, conditions, callback);
   }
-  const q = query(collection(db, col), ...conditions);
-  return onSnapshot(q, callback);
+
+  let activeUnsubscribe = null;
+  let hasFailed = false;
+
+  try {
+    const q = query(collection(db, col), ...conditions);
+    activeUnsubscribe = onSnapshot(q, callback, (error) => {
+      console.warn(`Firestore streamDocuments error for ${col}. Falling back to LocalStorage:`, error);
+      hasFailed = true;
+      if (activeUnsubscribe) activeUnsubscribe();
+      activeUnsubscribe = localDb.onSnapshot(col, conditions, callback);
+    });
+    
+    if (hasFailed) {
+      if (activeUnsubscribe) activeUnsubscribe();
+      activeUnsubscribe = localDb.onSnapshot(col, conditions, callback);
+    }
+  } catch (error) {
+    console.warn(`Firestore streamDocuments setup failed for ${col}. Falling back to LocalStorage:`, error);
+    activeUnsubscribe = localDb.onSnapshot(col, conditions, callback);
+  }
+
+  return () => {
+    if (activeUnsubscribe) activeUnsubscribe();
+  };
 };
 
 // Standard where/orderBy builder helpers
