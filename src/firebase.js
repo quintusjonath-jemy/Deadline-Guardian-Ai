@@ -209,6 +209,7 @@ const isGuestUser = () => {
 };
 
 const actualAuth = isLocalFallback ? localAuth : auth;
+const guestAuthListeners = new Set();
 
 export const authInstance = {
   get currentUser() {
@@ -230,6 +231,8 @@ export const authInstance = {
   },
   signOut() {
     localStorage.removeItem('dg_user');
+    guestAuthListeners.forEach(cb => cb(null));
+    guestAuthListeners.clear();
     return actualAuth.signOut();
   }
 };
@@ -250,6 +253,8 @@ export const registerUser = (email, password) => {
 
 export const logoutUser = () => {
   localStorage.removeItem('dg_user');
+  guestAuthListeners.forEach(cb => cb(null));
+  guestAuthListeners.clear();
   if (isLocalFallback) return localAuth.signOut();
   return signOut(auth);
 };
@@ -267,7 +272,10 @@ export const subscribeToAuth = (callback) => {
       const parsed = JSON.parse(guestUser);
       if (parsed && parsed.uid === 'usr_guest') {
         callback(parsed);
-        return () => {};
+        guestAuthListeners.add(callback);
+        return () => {
+          guestAuthListeners.delete(callback);
+        };
       }
     }
   } catch {
